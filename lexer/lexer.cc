@@ -14,6 +14,49 @@ void Lexer::read_char()
     next_position_++;
 }
 
+Token Lexer::new_token(std::string token_type, char token_literal)
+{
+    return Token{token_type, std::string {token_literal}};
+}
+
+Token Lexer::next_token()
+{
+    Token tok;
+    switch (current_char_)
+    {
+    case '=':
+        tok = new_token(ASSIGN, current_char_);
+        break;
+    case '+':
+        tok = new_token(PLUS, current_char_);
+        break;
+    case ',':
+        tok = new_token(COMMA, current_char_);
+        break;
+    case ';':
+        tok = new_token(SEMICOLON, current_char_);
+        break;
+    case '(':
+        tok = new_token(LPAREN, current_char_);
+        break;
+    case ')':
+        tok = new_token(RLAREN, current_char_);
+        break;
+    case '{':
+        tok = new_token(LBRACE, current_char_);
+        break;
+    case '}':
+        tok = new_token(RBRACE, current_char_);
+        break;
+    case 0:
+        tok.Literal = "";
+        tok.Type = EOF;
+        break;
+    }
+    read_char();
+    return tok;
+}
+
 Lexer::Lexer(std::string source_code) : source_code_(std::move(source_code))
 {
     read_char();
