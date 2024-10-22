@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.16)
+project(monkey_lang_cpp_implementation)
+include(CTest)
+add_subdirectory(external)
+add_subdirectory(tests)
+add_subdirectory(lexer)
+add_executable(monkey main.cc lexer/lexer.cc)
