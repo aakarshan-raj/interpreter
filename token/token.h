@@ -13,7 +13,7 @@
 #define COMMA "COMMA"
 #define SEMICOLON "SEMICOLON"
 #define LPAREN "LPAREN"
-#define RLAREN "RLAREN"
+#define RPAREN "RPAREN"
 #define LBRACE "LBRACE"
 #define RBRACE "RBRACE"
 #define FUNCTION "FUNCTION"

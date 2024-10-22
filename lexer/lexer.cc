@@ -40,7 +40,7 @@ Token Lexer::next_token()
         tok = new_token(LPAREN, current_char_);
         break;
     case ')':
-        tok = new_token(RLAREN, current_char_);
+        tok = new_token(RPAREN, current_char_);
         break;
     case '{':
         tok = new_token(LBRACE, current_char_);
