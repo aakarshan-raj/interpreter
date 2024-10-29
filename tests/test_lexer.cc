@@ -22,7 +22,6 @@ TEST(Lexer, SingleCharTokenTest)
         EXPECT_EQ(tok.Type, result.Type) << "Expected:" << tok.Type << " Got:" << result.Type;
         EXPECT_EQ(tok.Literal, result.Literal) << "Expected:" << tok.Literal << " Got:" << result.Literal;
     }
-    ASSERT_EQ(1, 1);
 }
 
 TEST(Lexer, MultiCharTokenTest)
@@ -77,5 +76,19 @@ TEST(Lexer, MultiCharTokenTest)
         EXPECT_EQ(tok.Type, result.Type) << "Expected:" << tok.Type << " Got:" << result.Type;
         EXPECT_EQ(tok.Literal, result.Literal) << "Expected:" << tok.Literal << " Got:" << result.Literal;
     }
-    ASSERT_EQ(1, 1);
+}
+
+TEST(Lexer, isLetter)
+{
+    struct TestStructIsLetter
+    {
+        char ch;
+        bool result;
+    };
+    Lexer lex("test");
+    std::vector<TestStructIsLetter> test_arr = {{'a', true}, {'b', true}, {'+', false}, {'$', false}};
+    for (const auto &ch : test_arr)
+    {
+        EXPECT_EQ(ch.result, lex.isLetter(ch.ch)) << "Expected:" << ch.result << " Got:" << lex.isLetter(ch.ch) << ". For" << ch.ch;
+    }
 }

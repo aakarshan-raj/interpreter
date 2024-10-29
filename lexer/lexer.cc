@@ -65,3 +65,12 @@ Lexer::Lexer(std::string source_code) : source_code_(std::move(source_code))
 {
     read_char();
 }
+
+bool Lexer::isLetter(char ch)
+{
+    if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch == '_')
+    {
+        return true;
+    }
+    return false;
+}

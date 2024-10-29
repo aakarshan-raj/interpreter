@@ -16,6 +16,8 @@ public:
     Lexer(std::string);
     ~Lexer() = default;
     Token next_token();
+    bool isLetter(char);
+    bool isDigit(char);
 };
 
 #endif
