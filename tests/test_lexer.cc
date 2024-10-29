@@ -3,7 +3,7 @@
 #include <vector>
 #include <string>
 
-TEST(Lexer, SingleTokenTest)
+TEST(Lexer, SingleCharTokenTest)
 {
     std::vector<Token> test_arr = {{ASSIGN, "="},
                                    {PLUS, "+"},
@@ -15,6 +15,61 @@ TEST(Lexer, SingleTokenTest)
                                    {SEMICOLON, ";"},
                                    {EOF, ""}};
     std::string input = "=+(){},;";
+    Lexer l(input);
+    for (const auto &tok : test_arr)
+    {
+        Token result = l.next_token();
+        EXPECT_EQ(tok.Type, result.Type) << "Expected:" << tok.Type << " Got:" << result.Type;
+        EXPECT_EQ(tok.Literal, result.Literal) << "Expected:" << tok.Literal << " Got:" << result.Literal;
+    }
+    ASSERT_EQ(1, 1);
+}
+
+TEST(Lexer, MultiCharTokenTest)
+{
+    std::vector<Token> test_arr = {{LET, "let"},
+                                   {IDENT, "five"},
+                                   {ASSIGN, "="},
+                                   {INT, "5"},
+                                   {SEMICOLON, ";"},
+                                   {LET, "let"},
+                                   {IDENT, "ten"},
+                                   {ASSIGN, "="},
+                                   {INT, "10"},
+                                   {SEMICOLON, ";"},
+                                   {LET, "let"},
+                                   {IDENT, "add"},
+                                   {ASSIGN, "="},
+                                   {FUNCTION, "fn"},
+                                   {LPAREN, "("},
+                                   {IDENT, "x"},
+                                   {COMMA, ","},
+                                   {IDENT, "y"},
+                                   {RPAREN, ")"},
+                                   {LBRACE, "{"},
+                                   {IDENT, "x"},
+                                   {PLUS, "+"},
+                                   {IDENT, "y"},
+                                   {SEMICOLON, ";"},
+                                   {RBRACE, "}"},
+                                   {SEMICOLON, ";"},
+                                   {LET, "let"},
+                                   {IDENT, "result"},
+                                   {ASSIGN, "="},
+                                   {IDENT, "add"},
+                                   {LPAREN, "("},
+                                   {IDENT, "five"},
+                                   {COMMA, ","},
+                                   {IDENT, "ten"},
+                                   {RPAREN, ")"},
+                                   {SEMICOLON, ";"},
+                                   {EOF, ""}};
+    std::string input = R""""(let five = 5;
+                                let ten = 10;
+                                let add = fn(x, y) {
+                                x + y;
+                                };
+                                let result = add(five, ten);)"""";
     Lexer l(input);
     for (const auto &tok : test_arr)
     {

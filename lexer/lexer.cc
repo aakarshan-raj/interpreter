@@ -16,7 +16,7 @@ void Lexer::read_char()
 
 Token Lexer::new_token(std::string token_type, char token_literal)
 {
-    return Token{token_type, std::string {token_literal}};
+    return Token{token_type, std::string{token_literal}};
 }
 
 Token Lexer::next_token()
@@ -51,6 +51,10 @@ Token Lexer::next_token()
     case 0:
         tok.Literal = "";
         tok.Type = EOF;
+        break;
+    default:
+        tok.Literal = "ILLEGAL";
+        tok.Type = ILLEGAL;
         break;
     }
     read_char();
