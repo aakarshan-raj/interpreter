@@ -74,3 +74,12 @@ bool Lexer::isLetter(char ch)
     }
     return false;
 }
+
+bool Lexer::isDigit(char ch)
+{
+    if (ch >= '0' && ch <= '9')
+    {
+        return true;
+    }
+    return false;
+}

@@ -92,3 +92,18 @@ TEST(Lexer, isLetter)
         EXPECT_EQ(ch.result, lex.isLetter(ch.ch)) << "Expected:" << ch.result << " Got:" << lex.isLetter(ch.ch) << ". For" << ch.ch;
     }
 }
+
+TEST(Lexer, isDigit)
+{
+    struct TestStructIsDigit
+    {
+        char ch;
+        bool result;
+    };
+    Lexer lex("test");
+    std::vector<TestStructIsDigit> test_arr = {{'9', true}, {'2', true}, {'a', false}, {'z', false}};
+    for (const auto &ch : test_arr)
+    {
+        EXPECT_EQ(ch.result, lex.isDigit(ch.ch)) << "Expected:" << ch.result << " Got:" << lex.isDigit(ch.ch) << ". For" << ch.ch;
+    }
+}
