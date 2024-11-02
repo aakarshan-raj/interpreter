@@ -2,6 +2,8 @@
 #define TOKEN_H
 
 #include <string>
+#include <map>
+#include <stdexcept>
 
 #define ASSIGN "ASSIGN"
 #define ILLEGAL "ILLEGAL"
@@ -24,5 +26,8 @@ struct Token
     std::string Type;
     std::string Literal;
 };
+
+
+std::string lookUpToken(std::string tok);
 
 #endif

@@ -53,8 +53,25 @@ Token Lexer::next_token()
         tok.Type = EOF;
         break;
     default:
-        tok.Literal = "ILLEGAL";
-        tok.Type = ILLEGAL;
+        if (isLetter(current_char_))
+        {
+            std::string word = getWord();
+            std::string word_type = lookUpToken(word);
+            tok.Literal = word;
+            tok.Type = word_type;
+        }
+        else if (isDigit(current_char_))
+        {
+            std::string digit = getDigit();
+            tok.Literal = digit;
+            tok.Type = INT;
+        }
+        else
+        {
+            tok.Literal = "ILLEGAL";
+            tok.Type = ILLEGAL;
+        }
+
         break;
     }
     read_char();
@@ -82,4 +99,28 @@ bool Lexer::isDigit(char ch)
         return true;
     }
     return false;
+}
+
+std::string Lexer::getWord()
+{
+    std::string word;
+    word.push_back(current_char_);
+    while (isLetter(source_code_[next_position_]) && next_position_ < source_code_.length())
+    {
+        read_char();
+        word.push_back(current_char_);
+    }
+    return word;
+}
+
+std::string Lexer::getDigit()
+{
+    std::string word;
+    word.push_back(current_char_);
+    while (isDigit(source_code_[next_position_]) && next_position_ < source_code_.length())
+    {
+        read_char();
+        word.push_back(current_char_);
+    }
+    return word;
 }

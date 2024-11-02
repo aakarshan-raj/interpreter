@@ -1,5 +1,6 @@
 #ifndef LEXER_H
 #define LEXER_H
+#include <iostream>
 
 #include "../token/token.h"
 class Lexer
@@ -18,6 +19,8 @@ public:
     Token next_token();
     bool isLetter(char);
     bool isDigit(char);
+    std::string getWord();   // read till next char is not a letter
+    std::string getDigit(); // read till next char is not a digit
 };
 
 #endif

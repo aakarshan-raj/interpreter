@@ -3,11 +3,11 @@
 
 int main()
 {
-    std::string source_code = "((=))";
+    std::string source_code = "((ab= 933+)";
     Lexer l(source_code);
 
-    for (int i = 0; i < source_code.length(); i++)
+    for (auto x = l.next_token(); x.Type != EOF; x = l.next_token())
     {
-        std::cout<<l.next_token().Literal<<std::endl;
+        std::cout << x.Type << std::endl;
     }
 }
