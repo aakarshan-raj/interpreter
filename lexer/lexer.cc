@@ -22,6 +22,7 @@ Token Lexer::new_token(std::string token_type, char token_literal)
 Token Lexer::next_token()
 {
     Token tok;
+    skipWhiteSpace();
     switch (current_char_)
     {
     case '=':
@@ -99,6 +100,14 @@ bool Lexer::isDigit(char ch)
         return true;
     }
     return false;
+}
+
+void Lexer::skipWhiteSpace()
+{
+    if (current_char_ == ' ' || current_char_ == '\n' || current_char_ == '\t' || current_char_ == '\r')
+    {
+        read_char();
+    }
 }
 
 std::string Lexer::getWord()

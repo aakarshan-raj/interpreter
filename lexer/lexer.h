@@ -21,6 +21,7 @@ public:
     bool isDigit(char);
     std::string getWord();   // read till next char is not a letter
     std::string getDigit(); // read till next char is not a digit
+    void skipWhiteSpace();
 };
 
 #endif
