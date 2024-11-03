@@ -69,7 +69,7 @@ Token Lexer::next_token()
         }
         else
         {
-            tok.Literal = "ILLEGAL";
+            tok.Literal = current_char_;
             tok.Type = ILLEGAL;
         }
 
@@ -95,7 +95,7 @@ bool Lexer::isLetter(char ch)
 
 bool Lexer::isDigit(char ch)
 {
-    if (ch >= '0' && ch <= '9')
+    if (ch >= '0' && ch <= '9' || ch == '.')
     {
         return true;
     }
