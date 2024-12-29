@@ -12,6 +12,8 @@ private:
     char current_char_{0};
     void read_char();
     Token new_token(std::string, char);
+    char peek();
+    Token concate_single_token();
 
 public:
     Lexer(std::string);

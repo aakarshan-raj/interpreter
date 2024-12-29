@@ -3,8 +3,12 @@
 std::map<std::string, std::string> lookUpTable{
     {"let", LET},
     {"fn", FUNCTION},
+    {"if", IF},
+    {"else", ELSE},
+    {"return", RETURN},
+    {"true", TRUE},
+    {"false", FALSE},
 };
-
 
 std::string lookUpToken(std::string tok)
 {

@@ -26,7 +26,14 @@ Token Lexer::next_token()
     switch (current_char_)
     {
     case '=':
-        tok = new_token(ASSIGN, current_char_);
+        if (source_code_[next_position_] == '=')
+        {
+            tok = concate_single_token();
+        }
+        else
+        {
+            tok = new_token(ASSIGN, current_char_);
+        }
         break;
     case '+':
         tok = new_token(PLUS, current_char_);
@@ -48,6 +55,31 @@ Token Lexer::next_token()
         break;
     case '}':
         tok = new_token(RBRACE, current_char_);
+        break;
+    case '!':
+        if (source_code_[next_position_] == '=')
+        {
+            tok = concate_single_token();
+        }
+        else
+        {
+            tok = new_token(BANG, current_char_);
+        }
+        break;
+    case '-':
+        tok = new_token(MINUS, current_char_);
+        break;
+    case '/':
+        tok = new_token(SLASH, current_char_);
+        break;
+    case '<':
+        tok = new_token(LT, current_char_);
+        break;
+    case '>':
+        tok = new_token(GT, current_char_);
+        break;
+    case '*':
+        tok = new_token(ASTERISK, current_char_);
         break;
     case 0:
         tok.Literal = "";
@@ -132,4 +164,38 @@ std::string Lexer::getDigit()
         word.push_back(current_char_);
     }
     return word;
+}
+
+Token Lexer::concate_single_token()
+{
+    if (current_char_ == '=')
+    {
+        if (peek() == '=')
+        {
+            read_char();
+
+            return {EQUALITY, "=="};
+        }
+    }
+    else if (current_char_ == '!')
+    {
+        if (peek() == '=')
+        {
+            read_char();
+
+            return {INEQUALITY, "!="};
+        }
+    }
+}
+
+char Lexer::peek()
+{
+    if (current_position_ >= source_code_.length())
+    {
+        return 0;
+    }
+    else
+    {
+        return source_code_[next_position_];
+    }
 }
