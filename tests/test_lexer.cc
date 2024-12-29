@@ -24,6 +24,36 @@ TEST(Lexer, SingleCharTokenTest)
     }
 }
 
+TEST(Lexer, isLetter)
+{
+    struct TestStructIsLetter
+    {
+        char ch;
+        bool result;
+    };
+    Lexer lex("test");
+    std::vector<TestStructIsLetter> test_arr = {{'a', true}, {'b', true}, {'+', false}, {'$', false}};
+    for (const auto &ch : test_arr)
+    {
+        EXPECT_EQ(ch.result, lex.isLetter(ch.ch)) << "Expected:" << ch.result << " Got:" << lex.isLetter(ch.ch) << ". For" << ch.ch;
+    }
+}
+
+TEST(Lexer, isDigit)
+{
+    struct TestStructIsDigit
+    {
+        char ch;
+        bool result;
+    };
+    Lexer lex("test");
+    std::vector<TestStructIsDigit> test_arr = {{'9', true}, {'2', true}, {'a', false}, {'z', false}};
+    for (const auto &ch : test_arr)
+    {
+        EXPECT_EQ(ch.result, lex.isDigit(ch.ch)) << "Expected:" << ch.result << " Got:" << lex.isDigit(ch.ch) << ". For" << ch.ch;
+    }
+}
+
 TEST(Lexer, MultiCharTokenTest)
 {
     std::vector<Token> test_arr = {{LET, "let"},
@@ -72,38 +102,12 @@ TEST(Lexer, MultiCharTokenTest)
     Lexer l(input);
     for (const auto &tok : test_arr)
     {
+        
         Token result = l.next_token();
-        EXPECT_EQ(tok.Type, result.Type) << "Expected:" << tok.Type << " Got:" << result.Type;
-        EXPECT_EQ(tok.Literal, result.Literal) << "Expected:" << tok.Literal << " Got:" << result.Literal;
+        EXPECT_EQ(tok.Type, result.Type) << "Expected:" << tok.Type << '\n'
+                                         << "     Got:" << result.Type;
+        EXPECT_EQ(tok.Literal, result.Literal) << "Expected:" << tok.Literal << '\n'
+                                               << "     Got:" << result.Literal;
     }
 }
 
-TEST(Lexer, isLetter)
-{
-    struct TestStructIsLetter
-    {
-        char ch;
-        bool result;
-    };
-    Lexer lex("test");
-    std::vector<TestStructIsLetter> test_arr = {{'a', true}, {'b', true}, {'+', false}, {'$', false}};
-    for (const auto &ch : test_arr)
-    {
-        EXPECT_EQ(ch.result, lex.isLetter(ch.ch)) << "Expected:" << ch.result << " Got:" << lex.isLetter(ch.ch) << ". For" << ch.ch;
-    }
-}
-
-TEST(Lexer, isDigit)
-{
-    struct TestStructIsDigit
-    {
-        char ch;
-        bool result;
-    };
-    Lexer lex("test");
-    std::vector<TestStructIsDigit> test_arr = {{'9', true}, {'2', true}, {'a', false}, {'z', false}};
-    for (const auto &ch : test_arr)
-    {
-        EXPECT_EQ(ch.result, lex.isDigit(ch.ch)) << "Expected:" << ch.result << " Got:" << lex.isDigit(ch.ch) << ". For" << ch.ch;
-    }
-}

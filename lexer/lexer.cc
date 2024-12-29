@@ -104,7 +104,7 @@ bool Lexer::isDigit(char ch)
 
 void Lexer::skipWhiteSpace()
 {
-    if (current_char_ == ' ' || current_char_ == '\n' || current_char_ == '\t' || current_char_ == '\r')
+    while (current_char_ == ' ' || current_char_ == '\n' || current_char_ == '\t' || current_char_ == '\r')
     {
         read_char();
     }

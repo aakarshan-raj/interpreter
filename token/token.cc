@@ -2,7 +2,7 @@
 
 std::map<std::string, std::string> lookUpTable{
     {"let", LET},
-    {"fn", LET},
+    {"fn", FUNCTION},
 };
 
 
