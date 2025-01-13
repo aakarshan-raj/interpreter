@@ -17,6 +17,7 @@ private:
 
 public:
     Lexer(std::string);
+    Lexer() = default;
     ~Lexer() = default;
     Token next_token();
     bool isLetter(char);

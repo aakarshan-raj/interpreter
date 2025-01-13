@@ -22,3 +22,9 @@ std::string lookUpToken(std::string tok)
         return IDENT;
     }
 }
+
+std::ostream &operator<<(std::ostream &os, Token &tok)
+{
+    os << "{ " << "Literal: " << tok.Literal << ", Type: " << tok.Type << "}\n";
+    return os;
+}

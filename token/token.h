@@ -4,6 +4,7 @@
 #include <string>
 #include <map>
 #include <stdexcept>
+#include <iostream>
 
 #define ASSIGN "ASSIGN"
 #define ILLEGAL "ILLEGAL"
@@ -42,7 +43,11 @@ struct Token
 {
     std::string Type;
     std::string Literal;
+
+    friend std::ostream &operator<<(std::ostream &os, Token &tok);
 };
+
+
 
 std::string lookUpToken(std::string tok);
 
