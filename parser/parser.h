@@ -1,25 +1,23 @@
 #include <string>
 #include <iostream>
+#include "token.h"
+#include <memory>
+#include "../lexer/lexer.h"
+#include "../ast/ast.h"
+class Parser
+{
+public:
+    Parser(std::shared_ptr<Lexer> lexer) : lexer_{lexer}
+    {
+        this->NextToken();
+        this->NextToken();
+    }
 
-class node{
-
-    public:
-        virtual std::string TokenLiteral() const = 0;
-        virtual ~node () = default;
-
+private:
+    std::shared_ptr<Lexer> lexer_;
+    Token current_token_;
+    Token peek_token_;
+    void NextToken();
+    std::shared_ptr<Program> ParseProgram();
+    
 };
-
-class statement: public node{
-    void statement_node();
-
-};
-
-class expression: public node{
-    void expression_node();
-
-};
-
-
-
-
-
