@@ -4,4 +4,6 @@ include(CTest)
 add_subdirectory(external)
 add_subdirectory(tests)
 add_subdirectory(lexer)
-add_executable(monkey main.cc lexer/lexer.cc token/token.cc repl/repl.cc parser/parser.cc)
+add_subdirectory(parser)
+
+add_executable(monkey main.cc lexer/lexer.cc token/token.cc repl/repl.cc parser/parser.cc ast/ast.cc)

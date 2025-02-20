@@ -9,11 +9,12 @@ void Repl::start()
         std::getline(std::cin, input_);
         if (input_ == "exit")
             break;
-        Lexer l(input_);
-
-        for (auto x = l.next_token(); x.Type != EOF; x = l.next_token())
-        {
-            std::cout << x;
-        }
+        std::shared_ptr<Lexer> l = std::make_shared<Lexer>(input_);
+        // for (auto x = l->next_token(); x.Type != EOF; x = l->next_token())
+        // {
+        //     std::cout << x;
+        // }
+        std::shared_ptr<Parser> p = std::make_shared<Parser>(l);
+        p->ParseProgram();
     }
 }

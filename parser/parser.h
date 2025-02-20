@@ -1,6 +1,9 @@
+#ifndef PARSER_H
+#define PARSER_H
+
 #include <string>
 #include <iostream>
-#include "token.h"
+#include "../token/token.h"
 #include <memory>
 #include "../lexer/lexer.h"
 #include "../ast/ast.h"
@@ -12,12 +15,14 @@ public:
         this->NextToken();
         this->NextToken();
     }
+    std::shared_ptr<Program> ParseProgram();
 
 private:
     std::shared_ptr<Lexer> lexer_;
     Token current_token_;
     Token peek_token_;
     void NextToken();
-    std::shared_ptr<Program> ParseProgram();
-    
+    std::shared_ptr<Statement> ParseStatement();    
 };
+
+#endif
