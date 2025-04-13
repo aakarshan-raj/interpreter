@@ -27,7 +27,7 @@ void TestLetStatements(std::shared_ptr<Statement> s, std::string variable_name)
     }
 }
 
-TEST(Paser, BasicTest)
+TEST(Parser, BasicTest)
 {
 
     std::string input = R""""(
