@@ -42,7 +42,7 @@ let foobar = 838383;
         lexer = std::make_shared<Lexer>(input);
     Parser parser(lexer);
 
-    std::shared_ptr<Program> program = parser.ParseProgram();
+    std::shared_ptr<Program> program = parser.parseProgram();
 
     if (program == nullptr)
     {

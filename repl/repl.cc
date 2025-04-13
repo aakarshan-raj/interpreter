@@ -15,6 +15,6 @@ void Repl::start()
         //     std::cout << x;
         // }
         std::shared_ptr<Parser> p = std::make_shared<Parser>(l);
-        p->ParseProgram();
+        p->parseProgram();
     }
 }

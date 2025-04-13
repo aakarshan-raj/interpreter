@@ -12,17 +12,22 @@ class Parser
 public:
     Parser(std::shared_ptr<Lexer> lexer) : lexer_{lexer}
     {
-        this->NextToken();
-        this->NextToken();
+        this->nextToken();
+        this->nextToken();
     }
-    std::shared_ptr<Program> ParseProgram();
+    std::shared_ptr<Program> parseProgram();
 
 private:
     std::shared_ptr<Lexer> lexer_;
     Token current_token_;
     Token peek_token_;
-    void NextToken();
-    std::shared_ptr<Statement> ParseStatement();    
+    void nextToken();
+    std::shared_ptr<Statement> parseStatement();
+    std::shared_ptr<Statement> Parser::praseLetStatement();
+
+    bool currentTokenIs(std::string &);
+    bool Parser::peekTokenIs(std::string &);
+    bool expectToken(std::string&);
 };
 
 #endif
