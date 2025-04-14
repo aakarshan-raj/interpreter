@@ -24,3 +24,6 @@ std::string Program::TokenLiteral() const
         return "";
     }
 }
+
+void LetStatement::statement_node(){}
+void Identifier::expression_node(){}

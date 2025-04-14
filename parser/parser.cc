@@ -37,10 +37,26 @@ std::shared_ptr<Statement> Parser::parseStatement()
 
 std::shared_ptr<Statement> Parser::praseLetStatement()
 {
-    auto letStatement = std::make_shared<LetStatement>(current_token_.Type);
+    auto letStatement = std::make_shared<LetStatement>(current_token_);
+    if (!expectToken(IDENT))
+    {
+        return nullptr;
+    }
+
+    letStatement->name_ = std::make_shared<Identifier>(current_token_);
+
+    if (!expectToken(ASSIGN))
+    {
+        return nullptr;
+    }
+
+    while (!currentTokenIs(SEMICOLON))
+    {
+        nextToken();
+    }
 }
 
-bool Parser::currentTokenIs(std::string &token)
+bool Parser::currentTokenIs(const std::string &token)
 {
     if (current_token_.Type == token)
     {
@@ -49,7 +65,7 @@ bool Parser::currentTokenIs(std::string &token)
     return false;
 }
 
-bool Parser::peekTokenIs(std::string &token)
+bool Parser::peekTokenIs(const std::string &token)
 {
     if (peek_token_.Type == token)
     {
@@ -58,7 +74,7 @@ bool Parser::peekTokenIs(std::string &token)
     return false;
 }
 
-bool Parser::expectToken(std::string &token)
+bool Parser::expectToken(const std::string &token)
 {
     if (peekTokenIs(token))
     {

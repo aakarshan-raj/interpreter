@@ -35,17 +35,22 @@ public:
 class Identifier : public Expression
 {
 public:
+    Identifier(const Token& t):token_(t){}
     Token token_;
     std::string value_;
     std::string TokenLiteral() const override;
+    void expression_node() override;
 };
 class LetStatement : public Statement
 {
 public:
+    LetStatement(const Token& t):token_(t){}
     Token token_;
     std::shared_ptr<Identifier> name_;
     std::shared_ptr<Expression> value_;
     std::string TokenLiteral() const override;
+    void statement_node() override;
+
 };
 
 #endif
