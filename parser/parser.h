@@ -27,7 +27,13 @@ private:
 
     bool currentTokenIs(const std::string &);
     bool peekTokenIs(const std::string &);
-    bool expectToken(const std::string&);
+    bool expectToken(const std::string &);
+
+    std::vector<std::string> errors;
+
+    std::vector<std::string> logErrors();
+
+    void peekError(const std::string&);
 };
 
 #endif

@@ -83,3 +83,14 @@ bool Parser::expectToken(const std::string &token)
     }
     return false;
 }
+
+std::vector<std::string> Parser::logErrors()
+{
+    return errors;
+}
+
+void Parser::peekError(const std::string &t)
+{
+    std::string error_message = "Expected : " + t + ", Got : " + peek_token_.Type;
+    errors.push_back(error_message);
+}

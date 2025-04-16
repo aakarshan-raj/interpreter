@@ -15,6 +15,11 @@ void Repl::start()
         //     std::cout << x;
         // }
         std::shared_ptr<Parser> p = std::make_shared<Parser>(l);
-        p->parseProgram();
+        auto x = p->parseProgram();
+        std::cout<<x<<std::endl;
+        // for (const auto &y : x->statements_)
+        // {
+        //     std::cout << y;
+        // }
     }
 }

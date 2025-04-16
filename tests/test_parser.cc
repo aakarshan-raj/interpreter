@@ -39,10 +39,10 @@ let foobar = 838383;
     std::vector<std::string> identifers = {"x", "y", "foobar"};
 
     std::shared_ptr<Lexer>
-        lexer = std::make_shared<Lexer>(input);
-    Parser parser(lexer);
+    lexer = std::make_shared<Lexer>(input);
+    std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
 
-    std::shared_ptr<Program> program = parser.parseProgram();
+    std::shared_ptr<Program> program = parser->parseProgram();
 
     if (program == nullptr)
     {
