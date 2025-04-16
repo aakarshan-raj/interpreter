@@ -18,8 +18,7 @@ std::shared_ptr<Program> Parser::parseProgram()
         }
         nextToken();
     }
-
-    return nullptr;
+    return program;
 }
 
 std::shared_ptr<Statement> Parser::parseStatement()
@@ -54,6 +53,7 @@ std::shared_ptr<Statement> Parser::praseLetStatement()
     {
         nextToken();
     }
+    return letStatement;
 }
 
 bool Parser::currentTokenIs(const std::string &token)
