@@ -35,7 +35,7 @@ public:
 class Identifier : public Expression
 {
 public:
-    Identifier(const Token& t):token_(t){}
+    Identifier(const Token& t):token_(t),value_(t.Literal){}
     Token token_;
     std::string value_;
     std::string TokenLiteral() const override;
