@@ -16,6 +16,8 @@ public:
         this->nextToken();
     }
     std::shared_ptr<Program> parseProgram();
+    std::vector<std::string> logErrors();
+
 
 private:
     std::shared_ptr<Lexer> lexer_;
@@ -31,7 +33,6 @@ private:
 
     std::vector<std::string> errors;
 
-    std::vector<std::string> logErrors();
 
     void peekError(const std::string&);
 };

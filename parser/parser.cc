@@ -81,6 +81,7 @@ bool Parser::expectToken(const std::string &token)
         nextToken();
         return true;
     }
+    peekError(token);
     return false;
 }
 

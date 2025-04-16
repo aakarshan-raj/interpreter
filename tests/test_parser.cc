@@ -27,6 +27,20 @@ void TestLetStatements(std::shared_ptr<Statement> s, std::string variable_name)
     }
 }
 
+void checkForParserErrors(std::shared_ptr<Parser> parser){
+    std::vector<std::string> errors = parser->logErrors();
+    if(errors.size() == 0){
+        return;
+    }
+    else{
+        for(const std::string &error:errors){
+            FAIL()<<error<<std::endl;
+        }
+    }
+
+}
+
+
 TEST(Parser, BasicTest)
 {
 
@@ -34,6 +48,7 @@ TEST(Parser, BasicTest)
 let x = 5;
 let y = 10;
 let foobar = 838383;
+let a;
     )"""";
 
     std::vector<std::string> identifers = {"x", "y", "foobar"};
@@ -58,4 +73,7 @@ let foobar = 838383;
     {
         TestLetStatements(program->statements_[i], identifers[i]);
     }
+
+    checkForParserErrors(parser);
+
 }
