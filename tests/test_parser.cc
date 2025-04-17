@@ -48,7 +48,7 @@ TEST(Parser, BasicTest)
 let x = 5;
 let y = 10;
 let foobar = 838383;
-let a;
+let a = 3;
     )"""";
 
     std::vector<std::string> identifers = {"x", "y", "foobar"};
@@ -72,6 +72,48 @@ let a;
     for (int i = 0; i < identifers.size(); i++)
     {
         TestLetStatements(program->statements_[i], identifers[i]);
+    }
+
+    checkForParserErrors(parser);
+
+}
+
+
+TEST(Parser, ReturnStatementTest)
+{
+
+    std::string input = R""""(
+return x;
+return 10;
+return 53458934;
+    )"""";
+
+
+    std::shared_ptr<Lexer>
+    lexer = std::make_shared<Lexer>(input);
+    std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
+    std::shared_ptr<Program> program = parser->parseProgram();
+
+    if (program == nullptr)
+    {
+        FAIL() << "Program is null.";
+    }
+
+    if (program->statements_.empty())
+    {
+        FAIL() << "Program has no statements.";
+    }
+    
+    if (program->statements_.size() != 3)
+    {
+        FAIL() << "Program doesn't contain 3 statements as expected.";
+    }
+
+    for(const auto &stmt:program->statements_){
+        auto returnStmt = std::dynamic_pointer_cast<ReturnStatement>(stmt);
+        if(returnStmt->TokenLiteral() != "return"){
+            FAIL()<<"Return tokenLiteral expected: return, got: "<<returnStmt->TokenLiteral();
+        }
     }
 
     checkForParserErrors(parser);

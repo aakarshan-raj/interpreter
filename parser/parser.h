@@ -24,8 +24,11 @@ private:
     Token current_token_;
     Token peek_token_;
     void nextToken();
+
+    // CORE
     std::shared_ptr<Statement> parseStatement();
     std::shared_ptr<Statement> praseLetStatement();
+    std::shared_ptr<Statement> parseReturnStatement();
 
     bool currentTokenIs(const std::string &);
     bool peekTokenIs(const std::string &);

@@ -10,6 +10,11 @@ std::string Identifier::TokenLiteral() const
     return token_.Literal;
 }
 
+std::string ReturnStatement::TokenLiteral() const
+{
+    return token_.Literal;
+}
+
 std::string Program::TokenLiteral() const
 {
     if (!statements_.empty() != 0)
@@ -27,3 +32,4 @@ std::string Program::TokenLiteral() const
 
 void LetStatement::statement_node(){}
 void Identifier::expression_node(){}
+void ReturnStatement::statement_node(){}

@@ -25,8 +25,12 @@ std::shared_ptr<Statement> Parser::parseStatement()
 {
     if (current_token_.Type == LET)
     {
-        auto stmt = praseLetStatement();
-        return stmt;
+        auto letStmt = praseLetStatement();
+        return letStmt;
+    }
+    else if (current_token_.Type == RETURN){
+        auto returnStmt = parseReturnStatement();
+        return returnStmt;
     }
     else
     {
@@ -95,3 +99,15 @@ void Parser::peekError(const std::string &t)
     std::string error_message = "Expected : " + t + ", Got : " + peek_token_.Type;
     errors.push_back(error_message);
 }
+
+std::shared_ptr<Statement> Parser::parseReturnStatement(){
+    auto stmt = std::make_shared<ReturnStatement>(current_token_);
+
+    nextToken();
+
+    if(!expectToken(SEMICOLON)){
+        nextToken();
+    }
+    return stmt;
+}
+
