@@ -6,12 +6,14 @@
 #include "../token/token.h"
 #include <memory>
 #include <vector>
+#include <sstream>
 
 class Node
 {
 
 public:
     virtual std::string TokenLiteral() const = 0;
+    virtual std::string String() const = 0;
     virtual ~Node() = default;
 };
 
@@ -30,6 +32,7 @@ class Program : public Node
 public:
     std::vector<std::shared_ptr<Statement>> statements_;
     std::string TokenLiteral() const override;
+    std::string String() const override;
 };
 
 class Identifier : public Expression
@@ -40,6 +43,8 @@ public:
     std::string value_;
     std::string TokenLiteral() const override;
     void expression_node() override;
+    std::string String() const override;
+
 };
 class LetStatement : public Statement
 {
@@ -50,6 +55,7 @@ public:
     std::shared_ptr<Expression> value_;
     std::string TokenLiteral() const override;
     void statement_node() override;
+    std::string String() const override;
 
 };
 
@@ -60,6 +66,19 @@ class ReturnStatement: public Statement{
     std::shared_ptr<Expression> ReturnExpression;
     std::string TokenLiteral() const override;
     void statement_node() override;
+    std::string String() const override;
+
+};
+
+class ExpressionStatement: public Statement{
+    public:
+    ExpressionStatement(const Token &t):token_(t){}
+    Token token_;
+    std::shared_ptr<Expression> Expr;
+    std::string TokenLiteral() const override;
+    void statement_node() override;
+    std::string String() const override;
+
 };
 
 #endif
