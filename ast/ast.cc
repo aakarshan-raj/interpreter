@@ -47,7 +47,11 @@ void ExpressionStatement::statement_node() {}
 
 std::string Program::String() const
 {
-    return "";
+    std::ostringstream out;
+    for(auto const &stmt:statements_){
+        out << stmt->String();
+    }
+    return out.str();
 }
 
 std::string Identifier::String() const
@@ -58,8 +62,8 @@ std::string Identifier::String() const
 std::string LetStatement::String() const
 {
     std::ostringstream out;
-    out << token_.Literal << name_->String() << " = ";
-    if (value_ != nullptr)
+    out << token_.Literal << " "<<name_->String() << " = ";
+    if (value_ != nullptr)            // we will evaluate expression later
         out << value_->String();
     out << ";";
     return out.str();
@@ -69,7 +73,7 @@ std::string ReturnStatement::String() const
 {
     std::ostringstream out;
     out << token_.Literal << " ";
-    if (ReturnExpression != nullptr)
+    if (ReturnExpression != nullptr)    // we will evaluate expression later
         out <<ReturnExpression->String();
     out << ";";
     return out.str();
@@ -77,7 +81,7 @@ std::string ReturnStatement::String() const
 
 std::string ExpressionStatement::String() const
 {
-    if (Expr != nullptr)
+    if (Expr != nullptr)              // we will evaluate expression later
         return Expr->String();
     return "";
 }

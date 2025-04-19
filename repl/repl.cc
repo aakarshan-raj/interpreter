@@ -18,8 +18,13 @@ void Repl::start()
         auto x = p->parseProgram();
         for (const auto &y : x->statements_)
         {
-             auto yy = std::dynamic_pointer_cast<LetStatement>(y);
-             std::cout<<yy->name_->value_<<std::endl;
+            auto yy = std::dynamic_pointer_cast<LetStatement>(y);
+            if (yy)
+            {
+                std::cout << yy->name_->value_ << std::endl;
+            }
+            std::cout << "Skipped" << std::endl;
         }
+        std::cout << x->String();
     }
 }
