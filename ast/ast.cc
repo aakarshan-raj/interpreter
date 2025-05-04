@@ -36,12 +36,20 @@ std::string ExpressionStatement::TokenLiteral() const
     return token_.Literal;
 }
 
+std::string IntegerLiteral::TokenLiteral() const
+{
+    return token_.Literal;
+}
+
 // Implement statement_node
 
 void LetStatement::statement_node() {}
-void Identifier::expression_node() {}
 void ReturnStatement::statement_node() {}
 void ExpressionStatement::statement_node() {}
+
+// Implement expression_node
+void Identifier::expression_node() {}
+void IntegerLiteral::expression_node() {}
 
 // Implement String
 
@@ -84,4 +92,9 @@ std::string ExpressionStatement::String() const
     if (Expr != nullptr)              // we will evaluate expression later
         return Expr->String();
     return "";
+}
+
+std::string IntegerLiteral::String() const
+{
+    return token_.Literal;
 }

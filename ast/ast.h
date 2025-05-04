@@ -81,4 +81,16 @@ class ExpressionStatement: public Statement{
 
 };
 
+class IntegerLiteral : public Expression
+{
+public:
+    IntegerLiteral(const Token& t):token_(t){}
+    Token token_;
+    int value_;
+    std::string TokenLiteral() const override;
+    void expression_node() override;
+    std::string String() const override;
+
+};
+
 #endif
