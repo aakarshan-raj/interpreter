@@ -31,6 +31,7 @@ public:
         this->nextToken();
         this->nextToken();
         registerPrefix(IDENT, std::bind(&Parser::parseIdentifier, this));
+        registerPrefix(INT, std::bind(&Parser::parseIntegerLiteral, this));
     }
     std::shared_ptr<Program> parseProgram();
     std::vector<std::string> logErrors();
@@ -52,7 +53,10 @@ private:
     // CORE EXPRESSION
     std::shared_ptr<ExpressionStatement> parseExpressionStatement();
     std::shared_ptr<Expression> parseExpression(Precedence);
+
+    // EXPRESSION FUNCTIONS ASSOCIATED WITH TOKENS
     std::shared_ptr<Expression> parseIdentifier();
+    std::shared_ptr<Expression> parseIntegerLiteral();
 
     // EXPRESSION MAPPER
     void registerPrefix(const std::string &, prefixParseFn);

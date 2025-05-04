@@ -119,7 +119,7 @@ TEST(Parser, IdentiferExpressionTest)
 
     EXPECT_NE(identifier, nullptr) << "Expected this expression to be a an identifier, is not.";
     EXPECT_EQ(identifier->value_, "foobar") << "identifier expected: " << input << " , got: " << identifier->value_;
-    EXPECT_EQ(identifier->TokenLiteral(), "foobar") << "identifier.TokenLiteral expected: " << input << " , got: " << identifier->value_;
+    EXPECT_EQ(identifier->TokenLiteral(), "foobar") << "identifier.TokenLiteral expected: " << input << " , got: " << identifier->TokenLiteral();
 
     checkForParserErrors(parser);
 }
@@ -143,11 +143,11 @@ TEST(Parser, IntegerExpressionTest)
 
     EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
 
-    auto identifier = std::dynamic_pointer_cast<Identifier>(expressionStatement->Expr);
+    auto intLiteral = std::dynamic_pointer_cast<IntegerLiteral>(expressionStatement->Expr);
 
-    EXPECT_NE(identifier, nullptr) << "Expected this expression to be a an identifier, is not.";
-    EXPECT_EQ(identifier->value_, "foobar") << "identifier expected: " << input << " , got: " << identifier->value_;
-    EXPECT_EQ(identifier->TokenLiteral(), "foobar") << "identifier.TokenLiteral expected: " << input << " , got: " << identifier->value_;
+    EXPECT_NE(intLiteral, nullptr) << "Expected this expression to be a an IntegerLiteral, is not.";
+    EXPECT_EQ(intLiteral->value_, 5) << "Integer literal expected: " << 5 << " , got: " << intLiteral->value_;
+    EXPECT_EQ(intLiteral->TokenLiteral(), "5") << "IntegerLiteral.TokenLiteral expected: " << input << " , got: " << intLiteral->TokenLiteral();
 
     checkForParserErrors(parser);
 }

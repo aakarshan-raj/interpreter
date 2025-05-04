@@ -145,3 +145,20 @@ std::shared_ptr<Expression> Parser::parseIdentifier()
 {
     return std::make_shared<Identifier>(current_token_);
 }
+
+std::shared_ptr<Expression> Parser::parseIntegerLiteral()
+{
+    auto intExpr = std::make_shared<IntegerLiteral>(current_token_);
+
+    try
+    {
+        intExpr->value_ = stoi(current_token_.Literal);
+    }
+    catch (const std::exception &e)
+    {
+        std::string intParseError = "Error while parsing string:"+current_token_.Literal +" as int.";
+        errors.push_back(intParseError); 
+        return 0;
+    }
+    return intExpr;
+}
