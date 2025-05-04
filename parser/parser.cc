@@ -33,7 +33,7 @@ std::shared_ptr<Statement> Parser::parseStatement()
     }
     else
     {
-        return nullptr;
+        return parseExpressionStatement();
     }
 }
 
@@ -110,4 +110,38 @@ std::shared_ptr<Statement> Parser::parseReturnStatement()
         nextToken();
     }
     return stmt;
+}
+
+std::shared_ptr<ExpressionStatement> Parser::parseExpressionStatement()
+{
+    auto expressionStatement = std::make_shared<ExpressionStatement>(current_token_);
+
+    expressionStatement->Expr = parseExpression(LOWEST);
+
+    if (peekTokenIs(SEMICOLON))
+        nextToken();
+    return expressionStatement;
+}
+
+void Parser::registerPrefix(const std::string &token, prefixParseFn func)
+{
+    prefixParseFns[token] = func;
+}
+void Parser::registerInfix(const std::string &token, infixParseFn func)
+{
+    infixParseFns[token] = func;
+}
+
+std::shared_ptr<Expression> Parser::parseExpression(Precedence pre)
+{
+    auto prefix = prefixParseFns[current_token_.Type];
+    if (prefix == nullptr)
+        return nullptr;
+    auto leftExp = prefix();
+    return leftExp;
+}
+
+std::shared_ptr<Expression> Parser::parseIdentifier()
+{
+    return std::make_shared<Identifier>(current_token_);
 }
