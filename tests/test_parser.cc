@@ -151,3 +151,49 @@ TEST(Parser, IntegerExpressionTest)
 
     checkForParserErrors(parser);
 }
+
+// bool TestIntegerLiteralOfPrefixExpression(std::shared_ptr<Expression> intL, int value_)
+// {
+    
+// }
+
+TEST(Parser, PrefixExpressionTest)
+{
+
+    struct PrefixExpressionTestStruct
+    {
+        std::string expr;
+        std::string op;
+        int integerLiteral;
+    };
+
+
+    std::vector<PrefixExpressionTestStruct> input = {{"!5", "!", 5}, {"-15", "-", 15}};
+
+    for (auto const &ex:input)
+    {
+
+        std::shared_ptr<Lexer>
+            lexer = std::make_shared<Lexer>(ex.expr);
+        std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
+        std::shared_ptr<Program> program = parser->parseProgram();
+
+        EXPECT_NE(program, nullptr) << "Program is null.";
+        EXPECT_NE(program->statements_.empty(), true) << "Program has no statements.";
+
+        EXPECT_EQ(program->statements_.size(), 1) << "Program doesn't contain 1 statements as expected.";
+
+        checkForParserErrors(parser);
+
+        auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
+
+        EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
+
+        auto prefixOp = std::dynamic_pointer_cast<PrefixExpression>(expressionStatement->Expr);
+
+        EXPECT_NE(prefixOp, nullptr) << "Expected this expression to be a an PrefixExpression, is not.";
+        EXPECT_EQ(prefixOp->op, ex.op) << "PrefixExpression operator expected: " << ex.op << " , got: " << prefixOp->op;
+        // EXPECT_EQ(intLiteral->TokenLiteral(), "5") << "IntegerLiteral.TokenLiteral expected: " << input << " , got: " << intLiteral->TokenLiteral();
+
+    }
+}

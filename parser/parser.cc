@@ -99,6 +99,12 @@ void Parser::peekError(const std::string &t)
     errors.push_back(error_message);
 }
 
+void Parser::noPrefixParseFnError(const std::string &t) {
+
+    std::string error_message = "no prefix parse function for "+t+" found";
+    errors.push_back(error_message);
+}
+
 std::shared_ptr<Statement> Parser::parseReturnStatement()
 {
     auto stmt = std::make_shared<ReturnStatement>(current_token_);
@@ -135,8 +141,10 @@ void Parser::registerInfix(const std::string &token, infixParseFn func)
 std::shared_ptr<Expression> Parser::parseExpression(Precedence pre)
 {
     auto prefix = prefixParseFns[current_token_.Type];
-    if (prefix == nullptr)
+    if (prefix == nullptr){
+        noPrefixParseFnError(current_token_.Literal);
         return nullptr;
+    }
     auto leftExp = prefix();
     return leftExp;
 }
@@ -161,4 +169,15 @@ std::shared_ptr<Expression> Parser::parseIntegerLiteral()
         return 0;
     }
     return intExpr;
+}
+
+
+std::shared_ptr<Expression> Parser::parsePrefixExpression()
+{
+    auto prefixExpr = std::make_shared<PrefixExpression>(current_token_);
+    prefixExpr->op = current_token_.Literal;
+
+    nextToken();
+    prefixExpr->right = parseExpression(PREFIX);
+    return prefixExpr;
 }
