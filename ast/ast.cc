@@ -41,6 +41,12 @@ std::string IntegerLiteral::TokenLiteral() const
     return token_.Literal;
 }
 
+std::string PrefixExpression::TokenLiteral() const
+{
+    return token_.Literal;
+}
+
+
 // Implement statement_node
 
 void LetStatement::statement_node() {}
@@ -50,6 +56,7 @@ void ExpressionStatement::statement_node() {}
 // Implement expression_node
 void Identifier::expression_node() {}
 void IntegerLiteral::expression_node() {}
+void PrefixExpression::expression_node() {}
 
 // Implement String
 
@@ -97,4 +104,14 @@ std::string ExpressionStatement::String() const
 std::string IntegerLiteral::String() const
 {
     return token_.Literal;
+}
+
+std::string PrefixExpression::String() const
+{
+    std::ostringstream out;
+    out << "(" << op;
+    if (right != nullptr)
+        out << right->String();
+    out << ")";
+    return out.str();
 }

@@ -93,4 +93,17 @@ public:
 
 };
 
+class PrefixExpression : public Expression
+{
+public:
+    PrefixExpression(const Token& t):token_(t){}
+    Token token_;
+    std::string op;
+    std::shared_ptr<Expression> right;
+    std::string TokenLiteral() const override;
+    void expression_node() override;
+    std::string String() const override;
+
+};
+
 #endif
