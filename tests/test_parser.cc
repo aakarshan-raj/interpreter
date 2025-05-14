@@ -200,7 +200,56 @@ TEST(Parser, PrefixExpressionTest)
         EXPECT_NE(prefixOp, nullptr) << "Expected this expression to be a an PrefixExpression, is not.";
         EXPECT_EQ(prefixOp->op, ex.op) << "PrefixExpression operator expected: " << ex.op << " , got: " << prefixOp->op;
         TestIntegerLiteralOfPrefixExpression(prefixOp->right,ex.integerLiteral);
-        // EXPECT_EQ(intLiteral->TokenLiteral(), "5") << "IntegerLiteral.TokenLiteral expected: " << input << " , got: " << intLiteral->TokenLiteral();
+    }
+}
 
+bool TestIntegerLiteralOfPrefixExpressionRightExpressionIdentifer(std::shared_ptr<Expression> iden_, std::string value_)
+{
+        auto idenOp = std::dynamic_pointer_cast<Identifier>(iden_);
+        EXPECT_NE(idenOp, nullptr) << "Expected this expression to be a Identifier, is not.";
+
+        EXPECT_EQ(idenOp->value_, value_) << "Identifier value is not same. Expected:"<<value_<<" Got:"<<idenOp->value_;
+
+        EXPECT_EQ(idenOp->TokenLiteral(), value_) << "IntegerLiteral TokenLiteral() is not same. Expected:"<<value_<<" Got:"<<idenOp->TokenLiteral();
+    
+}
+
+TEST(Parser, PrefixExpressionTestRightExpressionIdentifer)
+{
+
+    struct PrefixExpressionTestStruct
+    {
+        std::string expr;
+        std::string op;
+        std::string variable_name_;
+    };
+
+
+    std::vector<PrefixExpressionTestStruct> input = {{"!var", "!", "var"}, {"-abc", "-", "abc"}};
+
+    for (auto const &ex:input)
+    {
+
+        std::shared_ptr<Lexer>
+            lexer = std::make_shared<Lexer>(ex.expr);
+        std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
+        std::shared_ptr<Program> program = parser->parseProgram();
+
+        EXPECT_NE(program, nullptr) << "Program is null.";
+        EXPECT_NE(program->statements_.empty(), true) << "Program has no statements.";
+
+        EXPECT_EQ(program->statements_.size(), 1) << "Program doesn't contain 1 statements as expected.";
+
+        checkForParserErrors(parser);
+
+        auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
+
+        EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
+
+        auto prefixOp = std::dynamic_pointer_cast<PrefixExpression>(expressionStatement->Expr);
+
+        EXPECT_NE(prefixOp, nullptr) << "Expected this expression to be a an PrefixExpression, is not.";
+        EXPECT_EQ(prefixOp->op, ex.op) << "PrefixExpression operator expected: " << ex.op << " , got: " << prefixOp->op;
+        TestIntegerLiteralOfPrefixExpressionRightExpressionIdentifer(prefixOp->right,ex.variable_name_);
     }
 }
