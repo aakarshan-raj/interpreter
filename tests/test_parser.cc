@@ -152,10 +152,16 @@ TEST(Parser, IntegerExpressionTest)
     checkForParserErrors(parser);
 }
 
-// bool TestIntegerLiteralOfPrefixExpression(std::shared_ptr<Expression> intL, int value_)
-// {
+bool TestIntegerLiteralOfPrefixExpression(std::shared_ptr<Expression> intL, int value_)
+{
+        auto inteOp = std::dynamic_pointer_cast<IntegerLiteral>(intL);
+        EXPECT_NE(inteOp, nullptr) << "Expected this expression to be a integerLiteral, is not.";
+
+        EXPECT_EQ(inteOp->value_, value_) << "IntegerLiteral value is not same. Expected:"<<value_<<" Got:"<<inteOp->value_;
+
+        EXPECT_EQ(inteOp->TokenLiteral(), std::to_string(value_)) << "IntegerLiteral TokenLiteral() is not same. Expected:"<<value_<<" Got:"<<inteOp->TokenLiteral();
     
-// }
+}
 
 TEST(Parser, PrefixExpressionTest)
 {
@@ -193,6 +199,7 @@ TEST(Parser, PrefixExpressionTest)
 
         EXPECT_NE(prefixOp, nullptr) << "Expected this expression to be a an PrefixExpression, is not.";
         EXPECT_EQ(prefixOp->op, ex.op) << "PrefixExpression operator expected: " << ex.op << " , got: " << prefixOp->op;
+        TestIntegerLiteralOfPrefixExpression(prefixOp->right,ex.integerLiteral);
         // EXPECT_EQ(intLiteral->TokenLiteral(), "5") << "IntegerLiteral.TokenLiteral expected: " << input << " , got: " << intLiteral->TokenLiteral();
 
     }
