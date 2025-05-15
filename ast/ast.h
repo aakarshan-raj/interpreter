@@ -106,4 +106,18 @@ public:
 
 };
 
+class InfixExpression : public Expression
+{
+public:
+    InfixExpression(const Token& t):token_(t){}
+    Token token_;
+    std::string op;
+    std::shared_ptr<Expression> right;
+    std::shared_ptr<Expression> left;
+    std::string TokenLiteral() const override;
+    void expression_node() override;
+    std::string String() const override;
+
+};
+
 #endif
