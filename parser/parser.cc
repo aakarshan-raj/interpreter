@@ -1,5 +1,21 @@
 #include "parser.h"
 
+
+std::unordered_map<std::string,Precedence> precedence_map =
+{
+    {EQUALITY,EQUALS},
+    {INEQUALITY,EQUALS},
+
+    {LT,LESSGREATER},
+    {GT,LESSGREATER},
+
+    {PLUS,SUM},
+    {MINUS,SUM},
+
+    {ASTERISK,PRODUCT},
+    {SLASH,PRODUCT},
+};
+
 void Parser::nextToken()
 {
     current_token_ = peek_token_;
@@ -146,6 +162,15 @@ std::shared_ptr<Expression> Parser::parseExpression(Precedence pre)
         return nullptr;
     }
     auto leftExp = prefix();
+
+    while(!peekTokenIs(SEMICOLON) && pre < peekPrecedence()){
+        auto infixFn = infixParseFns[peek_token_.Type];
+        if (infixFn == nullptr)
+            return leftExp;
+        nextToken();
+        infixFn(leftExp);
+    }
+
     return leftExp;
 }
 
@@ -180,4 +205,36 @@ std::shared_ptr<Expression> Parser::parsePrefixExpression()
     nextToken();
     prefixExpr->right = parseExpression(PREFIX);
     return prefixExpr;
+}
+
+Precedence Parser::peekPrecedence()
+{
+    auto x = precedence_map[peek_token_.Type];
+    if (precedence_map[peek_token_.Type] == 0)
+    {
+        return LOWEST;
+    }
+    return precedence_map[peek_token_.Type];
+}
+
+Precedence Parser::curPrecedence()
+{
+    auto x = precedence_map[current_token_.Type];
+    if (precedence_map[peek_token_.Type] == 0)
+    {
+        return LOWEST;
+    }
+    return precedence_map[peek_token_.Type];
+}
+
+std::shared_ptr<Expression> Parser::parseInfixExpression(std::shared_ptr<Expression> expr)
+{
+    std::shared_ptr<InfixExpression> infixExpr = std::make_shared<InfixExpression>(current_token_);
+    infixExpr->left = expr;
+    infixExpr->op = current_token_.Literal;
+
+    Precedence current_token_precedence = curPrecedence();
+    nextToken();
+    infixExpr->right = parseExpression(current_token_precedence);
+    return infixExpr;
 }

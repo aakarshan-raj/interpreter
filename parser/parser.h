@@ -18,11 +18,12 @@ enum Precedence
     LOWEST = 1,
     EQUALS,      // ==
     LESSGREATER, // > or <
-    SUM,         // +
+    SUM,         // +j
     PRODUCT,     // *
     PREFIX,      // -X or !X
     CALL         // myFunction(X)
 };
+
 class Parser
 {
 public:
@@ -35,6 +36,16 @@ public:
 
         registerPrefix(BANG, std::bind(&Parser::parsePrefixExpression, this));
         registerPrefix(MINUS, std::bind(&Parser::parsePrefixExpression, this));
+
+        registerInfix(PLUS,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
+        registerInfix(MINUS,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
+        registerInfix(ASTERISK,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
+        registerInfix(SLASH,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
+        registerInfix(LT,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
+        registerInfix(GT,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
+        registerInfix(EQUALITY,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
+        registerInfix(INEQUALITY,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
+
 
     }
     std::shared_ptr<Program> parseProgram();
@@ -62,6 +73,8 @@ private:
     std::shared_ptr<Expression> parseIdentifier();
     std::shared_ptr<Expression> parseIntegerLiteral();
     std::shared_ptr<Expression> parsePrefixExpression();
+    std::shared_ptr<Expression> parseInfixExpression(std::shared_ptr<Expression> expr);
+
 
 
     // EXPRESSION MAPPER
@@ -72,6 +85,9 @@ private:
     bool currentTokenIs(const std::string &);
     bool peekTokenIs(const std::string &);
     bool expectToken(const std::string &);
+
+    Precedence peekPrecedence();
+    Precedence curPrecedence();
 
     std::vector<std::string> errors;
 
