@@ -267,7 +267,7 @@ TEST(Parser, infixExpressionTest)
     };
 
 
-    std::vector<PrefixExpressionTestStruct> input = {{"5-5", "-", 5,5}, {"1+5", "+", 1,5}};
+    std::vector<PrefixExpressionTestStruct> input = {{"10-5", "-", 10,5}, {"1+5", "+", 1,5}};
 
     for (auto const &ex:input)
     {
@@ -292,7 +292,7 @@ TEST(Parser, infixExpressionTest)
 
         EXPECT_NE(prefixOp, nullptr) << "Expected this expression to be a an InfixExpression, is not.";
 
-        TestIntegerLiteralOfPrefixExpression(prefixOp->right,ex.leftIntegerLiteral);
+        TestIntegerLiteralOfPrefixExpression(prefixOp->left,ex.leftIntegerLiteral);
         EXPECT_EQ(prefixOp->op, ex.op) << "PrefixExpression operator expected: " << ex.op << " , got: " << prefixOp->op;
         TestIntegerLiteralOfPrefixExpression(prefixOp->right,ex.rightIntegerLiteral);
     }

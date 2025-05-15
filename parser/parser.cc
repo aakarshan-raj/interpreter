@@ -168,7 +168,7 @@ std::shared_ptr<Expression> Parser::parseExpression(Precedence pre)
         if (infixFn == nullptr)
             return leftExp;
         nextToken();
-        infixFn(leftExp);
+        leftExp = infixFn(leftExp);
     }
 
     return leftExp;
