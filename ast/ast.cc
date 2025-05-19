@@ -126,7 +126,7 @@ std::string PrefixExpression::String() const
 std::string InfixExpression::String() const
 {
     std::ostringstream out;
-    out << "( ";
+    out << "(";
     if (left != nullptr)
         out << left->String();
     out << " ";
