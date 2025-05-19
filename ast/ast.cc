@@ -116,10 +116,10 @@ std::string IntegerLiteral::String() const
 std::string PrefixExpression::String() const
 {
     std::ostringstream out;
-    out << "( " << op;
+    out << "(" << op;
     if (right != nullptr)
         out << right->String();
-    out << " )";
+    out << ")";
     return out.str();
 }
 

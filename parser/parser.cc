@@ -30,6 +30,52 @@ std::shared_ptr<Program> Parser::parseProgram()
         std::shared_ptr<Statement> stmt = parseStatement();
         if (stmt != nullptr)
         {
+
+            std::shared_ptr<ExpressionStatement> yyyy = std::dynamic_pointer_cast<ExpressionStatement>(stmt);
+            std::shared_ptr<Expression> zzzz = std::dynamic_pointer_cast<Expression>(yyyy->Expr);
+
+            auto a = std::dynamic_pointer_cast<LetStatement>(zzzz);
+            if (a == nullptr)
+            {
+                auto b = std::dynamic_pointer_cast<ReturnStatement>(zzzz);
+                if (b == nullptr)
+                {
+
+                    auto c = std::dynamic_pointer_cast<IntegerLiteral>(zzzz);
+                    if (c == nullptr)
+                    {
+                        auto d = std::dynamic_pointer_cast<PrefixExpression>(yyyy);
+                        if (d == nullptr)
+                        {
+                            auto e = std::dynamic_pointer_cast<InfixExpression>(zzzz);
+                            if (e == nullptr)
+                            {
+                            }
+                            else
+                            {
+                                std::cout << "Type: [InfixExpression]" << std::endl;
+                            }
+                        }
+                        else
+                        {
+                            std::cout << "Type: [PrefixExpression]" << std::endl;
+                        }
+                    }
+                    else
+                    {
+                        std::cout << "Type: [IntegerLiteral]" << std::endl;
+                    }
+                }
+                else
+                {
+                    std::cout << "Type: [ReturnStatement]" << std::endl;
+                }
+            }
+            else
+            {
+                std::cout << "Type: [LetStatement]" << std::endl;
+            }
+
             program->statements_.push_back(stmt);
         }
         nextToken();

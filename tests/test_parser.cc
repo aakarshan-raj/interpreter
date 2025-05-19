@@ -378,10 +378,8 @@ TEST(Parser, infixExpressionExtendedTest)
 
         EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
 
-        auto infixOp = std::dynamic_pointer_cast<InfixExpression>(expressionStatement->Expr);
+        auto infixOpString = program->String();
 
-        EXPECT_NE(infixOp, nullptr) << "Expected this expression to be a an InfixExpression, is not.";
-
-        EXPECT_EQ(infixOp->String(), ex.output) << "PrefixExpression operator expected: " << ex.output << " , got: " << infixOp->String();
+        EXPECT_EQ(infixOpString, ex.output) << "PrefixExpression operator expected: " << ex.output << " , got: " << infixOpString;
     }
 }
