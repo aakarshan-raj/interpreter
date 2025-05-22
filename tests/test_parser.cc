@@ -288,13 +288,13 @@ TEST(Parser, infixExpressionTest)
 
         EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
 
-        auto prefixOp = std::dynamic_pointer_cast<InfixExpression>(expressionStatement->Expr);
+        auto infixOp = std::dynamic_pointer_cast<InfixExpression>(expressionStatement->Expr);
 
-        EXPECT_NE(prefixOp, nullptr) << "Expected this expression to be a an InfixExpression, is not.";
+        EXPECT_NE(infixOp, nullptr) << "Expected this expression to be a an InfixExpression, is not.";
 
-        TestIntegerLiteralOfPrefixExpression(prefixOp->left,ex.leftIntegerLiteral);
-        EXPECT_EQ(prefixOp->op, ex.op) << "PrefixExpression operator expected: " << ex.op << " , got: " << prefixOp->op;
-        TestIntegerLiteralOfPrefixExpression(prefixOp->right,ex.rightIntegerLiteral);
+        TestIntegerLiteralOfPrefixExpression(infixOp->left,ex.leftIntegerLiteral);
+        EXPECT_EQ(infixOp->op, ex.op) << "InfixExpression operator expected: " << ex.op << " , got: " << infixOp->op;
+        TestIntegerLiteralOfPrefixExpression(infixOp->right,ex.rightIntegerLiteral);
     }
 }
 
@@ -380,6 +380,6 @@ TEST(Parser, infixExpressionExtendedTest)
 
         auto infixOpString = program->String();
 
-        EXPECT_EQ(infixOpString, ex.output) << "PrefixExpression operator expected: " << ex.output << " , got: " << infixOpString;
+        EXPECT_EQ(infixOpString, ex.output) << "Expected: " << ex.output << " , got: " << infixOpString;
     }
 }
