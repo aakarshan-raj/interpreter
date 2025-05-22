@@ -156,7 +156,6 @@ void Parser::registerInfix(const std::string &token, infixParseFn func)
 
 std::shared_ptr<Expression> Parser::parseExpression(Precedence pre)
 {
-    std::cout<<"parseExpression"<<std::endl;
     auto prefix = prefixParseFns[current_token_.Type];
     if (prefix == nullptr){
         noPrefixParseFnError(current_token_.Literal);
@@ -165,7 +164,6 @@ std::shared_ptr<Expression> Parser::parseExpression(Precedence pre)
     auto leftExp = prefix();
 
     while(!peekTokenIs(SEMICOLON) && pre < peekPrecedence()){
-    std::cout<<"INSIDE"<<std::endl;
         auto infixFn = infixParseFns[peek_token_.Type];
         if (infixFn == nullptr)
             return leftExp;
@@ -178,14 +176,11 @@ std::shared_ptr<Expression> Parser::parseExpression(Precedence pre)
 
 std::shared_ptr<Expression> Parser::parseIdentifier()
 {
-    std::cout<<"parseIdentifier"<<std::endl;
     return std::make_shared<Identifier>(current_token_);
 }
 
 std::shared_ptr<Expression> Parser::parseIntegerLiteral()
 {
-    std::cout<<"parseIntegerLiteral"<<std::endl;
-
     auto intExpr = std::make_shared<IntegerLiteral>(current_token_);
 
     try
@@ -204,7 +199,6 @@ std::shared_ptr<Expression> Parser::parseIntegerLiteral()
 
 std::shared_ptr<Expression> Parser::parsePrefixExpression()
 {
-    std::cout<<"parsePrefixExpression"<<std::endl;
     auto prefixExpr = std::make_shared<PrefixExpression>(current_token_);
     prefixExpr->op = current_token_.Literal;
 
