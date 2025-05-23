@@ -209,22 +209,22 @@ std::shared_ptr<Expression> Parser::parsePrefixExpression()
 
 Precedence Parser::peekPrecedence()
 {
-    auto x = precedence_map[peek_token_.Type];
-    if (precedence_map[peek_token_.Type] == 0)
+    Precedence peek_precedence = precedence_map[peek_token_.Type];
+    if (peek_precedence == 0)
     {
         return LOWEST;
     }
-    return precedence_map[peek_token_.Type];
+    return peek_precedence;
 }
 
 Precedence Parser::curPrecedence()
 {
-    auto x = precedence_map[current_token_.Type];
-    if (precedence_map[peek_token_.Type] == 0)
+    Precedence current_precedence = precedence_map[current_token_.Type];
+    if (current_precedence == 0)
     {
         return LOWEST;
     }
-    return precedence_map[peek_token_.Type];
+    return current_precedence;
 }
 
 std::shared_ptr<Expression> Parser::parseInfixExpression(std::shared_ptr<Expression> expr)

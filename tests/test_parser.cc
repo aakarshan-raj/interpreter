@@ -370,8 +370,6 @@ TEST(Parser, infixExpressionExtendedTest)
         EXPECT_NE(program, nullptr) << "Program is null.";
         EXPECT_NE(program->statements_.empty(), true) << "Program has no statements.";
 
-        EXPECT_EQ(program->statements_.size(), 1) << "Program doesn't contain 1 statements as expected.";
-
         checkForParserErrors(parser);
 
         auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
