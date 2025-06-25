@@ -10,4 +10,5 @@ private:
 
 public:
     void start();
+    void type_info(std::shared_ptr<Statement>);
 };
