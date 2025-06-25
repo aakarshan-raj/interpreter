@@ -25,10 +25,8 @@ std::string Program::TokenLiteral() const
             std::cout << x->TokenLiteral();
         }
     }
-    else
-    {
         return "";
-    }
+    
 }
 
 std::string ExpressionStatement::TokenLiteral() const
@@ -49,6 +47,26 @@ std::string PrefixExpression::TokenLiteral() const
 std::string InfixExpression::TokenLiteral() const
 {
     return token_.Literal;
+}
+
+std::string_view Identifier::Type() const
+{
+    return std::string_view("Identifier");
+}
+
+std::string_view IntegerLiteral::Type() const
+{
+    return std::string_view("IntegerLiteral");
+}
+
+std::string_view PrefixExpression::Type() const
+{
+    return std::string_view("PrefixExpression");
+}
+
+std::string_view InfixExpression::Type() const
+{
+    return std::string_view("InfixExpression");
 }
 
 

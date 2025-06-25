@@ -25,6 +25,8 @@ class Statement : public Node
 class Expression : public Node
 {
     virtual void expression_node() = 0;
+    public: 
+    virtual std::string_view Type() const = 0;
 };
 
 class Program : public Node
@@ -44,6 +46,7 @@ public:
     std::string TokenLiteral() const override;
     void expression_node() override;
     std::string String() const override;
+    std::string_view Type() const override;
 
 };
 class LetStatement : public Statement
@@ -78,7 +81,6 @@ class ExpressionStatement: public Statement{
     std::string TokenLiteral() const override;
     void statement_node() override;
     std::string String() const override;
-
 };
 
 class IntegerLiteral : public Expression
@@ -90,7 +92,7 @@ public:
     std::string TokenLiteral() const override;
     void expression_node() override;
     std::string String() const override;
-
+    std::string_view Type() const override;
 };
 
 class PrefixExpression : public Expression
@@ -103,7 +105,7 @@ public:
     std::string TokenLiteral() const override;
     void expression_node() override;
     std::string String() const override;
-
+    std::string_view Type() const override;
 };
 
 class InfixExpression : public Expression
@@ -117,7 +119,7 @@ public:
     std::string TokenLiteral() const override;
     void expression_node() override;
     std::string String() const override;
-
+    std::string_view Type() const override;
 };
 
 #endif
