@@ -20,6 +20,7 @@ public:
 class Statement : public Node
 {
     virtual void statement_node() = 0;
+    virtual std::string_view Type() const = 0;
 };
 
 class Expression : public Node
@@ -59,7 +60,7 @@ public:
     std::string TokenLiteral() const override;
     void statement_node() override;
     std::string String() const override;
-
+    std::string_view Type() const override;
 };
 
 class ReturnStatement: public Statement{
@@ -70,6 +71,7 @@ class ReturnStatement: public Statement{
     std::string TokenLiteral() const override;
     void statement_node() override;
     std::string String() const override;
+    std::string_view Type() const override;
 
 };
 
@@ -81,6 +83,8 @@ class ExpressionStatement: public Statement{
     std::string TokenLiteral() const override;
     void statement_node() override;
     std::string String() const override;
+    std::string_view Type() const override;
+
 };
 
 class IntegerLiteral : public Expression

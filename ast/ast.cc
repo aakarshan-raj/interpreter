@@ -25,8 +25,7 @@ std::string Program::TokenLiteral() const
             std::cout << x->TokenLiteral();
         }
     }
-        return "";
-    
+    return "";
 }
 
 std::string ExpressionStatement::TokenLiteral() const
@@ -69,6 +68,26 @@ std::string_view InfixExpression::Type() const
     return std::string_view("InfixExpression");
 }
 
+std::string_view LetStatement::Type() const
+{
+    std::string temp = "LetStatement " + name_->String();
+    temp.append(value_->Type());
+    return std::string_view(temp);
+}
+
+std::string_view ReturnStatement::Type() const
+{
+    std::string temp = "Return ";
+    temp.append(ReturnExpression->Type());
+    return std::string_view(temp);
+}
+
+std::string_view ExpressionStatement::Type() const
+{
+    std::string temp = "ExpressionStatement: ";
+    temp.append(Expr->Type());
+    return std::string_view(temp);
+}
 
 // Implement statement_node
 
@@ -82,13 +101,13 @@ void IntegerLiteral::expression_node() {}
 void PrefixExpression::expression_node() {}
 void InfixExpression::expression_node() {}
 
-
 // Implement String
 
 std::string Program::String() const
 {
     std::ostringstream out;
-    for(auto const &stmt:statements_){
+    for (auto const &stmt : statements_)
+    {
         out << stmt->String();
     }
     return out.str();
@@ -102,8 +121,8 @@ std::string Identifier::String() const
 std::string LetStatement::String() const
 {
     std::ostringstream out;
-    out << token_.Literal << " "<<name_->String() << " = ";
-    if (value_ != nullptr)            // we will evaluate expression later
+    out << token_.Literal << " " << name_->String() << " = ";
+    if (value_ != nullptr) // we will evaluate expression later
         out << value_->String();
     out << ";";
     return out.str();
@@ -113,15 +132,15 @@ std::string ReturnStatement::String() const
 {
     std::ostringstream out;
     out << token_.Literal << " ";
-    if (ReturnExpression != nullptr)    // we will evaluate expression later
-        out <<ReturnExpression->String();
+    if (ReturnExpression != nullptr) // we will evaluate expression later
+        out << ReturnExpression->String();
     out << ";";
     return out.str();
 }
 
 std::string ExpressionStatement::String() const
 {
-    if (Expr != nullptr)              // we will evaluate expression later
+    if (Expr != nullptr) // we will evaluate expression later
         return Expr->String();
     return "";
 }
