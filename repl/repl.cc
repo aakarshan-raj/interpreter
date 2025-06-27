@@ -15,7 +15,7 @@ void Repl::start()
         auto x = p->parseProgram();
 
         type_info(x->statements_[0]);
-        std::cout << x->String();
+        std::cout << x->String()<<std::endl;;
     }
 }
 
