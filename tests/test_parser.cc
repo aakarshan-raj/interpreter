@@ -152,7 +152,7 @@ TEST(Parser, IntegerExpressionTest)
     checkForParserErrors(parser);
 }
 
-bool TestIntegerLiteralOfPrefixExpression(std::shared_ptr<Expression> intL, int value_)
+bool TestIntegerLiteral(std::shared_ptr<Expression> intL, int value_)
 {
         auto inteOp = std::dynamic_pointer_cast<IntegerLiteral>(intL);
         EXPECT_NE(inteOp, nullptr) << "Expected this expression to be a integerLiteral, is not.";
@@ -199,11 +199,11 @@ TEST(Parser, PrefixExpressionTest)
 
         EXPECT_NE(prefixOp, nullptr) << "Expected this expression to be a an PrefixExpression, is not.";
         EXPECT_EQ(prefixOp->op, ex.op) << "PrefixExpression operator expected: " << ex.op << " , got: " << prefixOp->op;
-        TestIntegerLiteralOfPrefixExpression(prefixOp->right,ex.integerLiteral);
+        TestIntegerLiteral(prefixOp->right,ex.integerLiteral);
     }
 }
 
-bool TestIntegerLiteralOfPrefixExpressionRightExpressionIdentifer(std::shared_ptr<Expression> iden_, std::string value_)
+bool TestIdetifier(std::shared_ptr<Expression> iden_, std::string value_)
 {
         auto idenOp = std::dynamic_pointer_cast<Identifier>(iden_);
         EXPECT_NE(idenOp, nullptr) << "Expected this expression to be a Identifier, is not.";
@@ -250,7 +250,7 @@ TEST(Parser, PrefixExpressionTestRightExpressionIdentifer)
 
         EXPECT_NE(prefixOp, nullptr) << "Expected this expression to be a an PrefixExpression, is not.";
         EXPECT_EQ(prefixOp->op, ex.op) << "PrefixExpression operator expected: " << ex.op << " , got: " << prefixOp->op;
-        TestIntegerLiteralOfPrefixExpressionRightExpressionIdentifer(prefixOp->right,ex.variable_name_);
+        TestIdetifier(prefixOp->right,ex.variable_name_);
     }
 }
 
@@ -292,9 +292,9 @@ TEST(Parser, infixExpressionTest)
 
         EXPECT_NE(infixOp, nullptr) << "Expected this expression to be a an InfixExpression, is not.";
 
-        TestIntegerLiteralOfPrefixExpression(infixOp->left,ex.leftIntegerLiteral);
+        TestIntegerLiteral(infixOp->left,ex.leftIntegerLiteral);
         EXPECT_EQ(infixOp->op, ex.op) << "InfixExpression operator expected: " << ex.op << " , got: " << infixOp->op;
-        TestIntegerLiteralOfPrefixExpression(infixOp->right,ex.rightIntegerLiteral);
+        TestIntegerLiteral(infixOp->right,ex.rightIntegerLiteral);
     }
 }
 
