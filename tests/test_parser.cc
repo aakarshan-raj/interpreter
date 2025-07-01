@@ -200,7 +200,7 @@ TEST(Parser, PrefixExpressionTestRightExpressionIdentifer)
 TEST(Parser, infixExpressionTest)
 {
 
-    struct PrefixExpressionTestStruct
+    struct InfixExpressionTestStruct
     {
         std::string expr;
         std::string op;
@@ -209,7 +209,7 @@ TEST(Parser, infixExpressionTest)
     };
 
 
-    std::vector<PrefixExpressionTestStruct> input = {{"10-5", "-", 10,5}, {"1+5", "+", 1,5}};
+    std::vector<InfixExpressionTestStruct> input = {{"10-5", "-", 10,5}, {"1+5", "+", 1,5}};
 
     for (auto const &ex:input)
     {
@@ -243,13 +243,13 @@ TEST(Parser, infixExpressionTest)
 TEST(Parser, infixExpressionExtendedTest)
 {
 
-    struct PrefixExpressionTestStruct
+    struct InfixExpressionTestStruct
     {
         std::string input;
         std::string output;
     };
 
-    std::vector<PrefixExpressionTestStruct> input = {
+    std::vector<InfixExpressionTestStruct> input = {
         {"3 + 2 * 4", "(3 + (2 * 4))"},
         {
             "!-a",
