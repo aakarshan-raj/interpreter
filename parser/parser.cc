@@ -238,3 +238,13 @@ std::shared_ptr<Expression> Parser::parseInfixExpression(std::shared_ptr<Express
     infixExpr->right = parseExpression(current_token_precedence);
     return infixExpr;
 }
+
+std::shared_ptr<Expression> Parser::parseBooleanLiteral(){
+    std::shared_ptr<BooleanLiteral> expr = std::make_shared<BooleanLiteral>(current_token_);
+    if(current_token_.Type == TRUE){
+       expr->value_ = true;
+    } else {
+      expr->value_ = false;
+    }
+    return expr;
+}
