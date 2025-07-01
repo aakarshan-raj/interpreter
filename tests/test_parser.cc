@@ -17,7 +17,7 @@ let foobar = 838383;
 let a = 3;
     )"""";
 
-    std::vector<std::string> identifers = {"x", "y", "foobar"};
+    std::vector<std::string> identifiers = {"x", "y", "foobar"};
 
     std::shared_ptr<Lexer> lexer = std::make_shared<Lexer>(input);
     std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
@@ -26,9 +26,9 @@ let a = 3;
     EXPECT_NE(program, nullptr) << "Program is null.";
     EXPECT_NE(program->statements_.empty(), true) << "Program has no statements.";
 
-    for (int i = 0; i < identifers.size(); i++)
+    for (int i = 0; i < identifiers.size(); i++)
     {
-        TestLetStatements(program->statements_[i], identifers[i]);
+        TestLetStatements(program->statements_[i], identifiers[i]);
     }
 
     checkForParserErrors(parser);
@@ -61,7 +61,7 @@ return 53458934;
     checkForParserErrors(parser);
 }
 
-TEST(Parser, IdentiferExpressionTest)
+TEST(Parser, identifierExpressionTest)
 {
 
     std::string input = "foobar;";
@@ -154,7 +154,7 @@ TEST(Parser, PrefixExpressionTest)
     }
 }
 
-TEST(Parser, PrefixExpressionTestRightExpressionIdentifer)
+TEST(Parser, PrefixExpressionTestRightExpressionidentifier)
 {
 
     struct PrefixExpressionTestStruct
