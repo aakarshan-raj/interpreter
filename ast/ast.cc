@@ -48,6 +48,11 @@ std::string InfixExpression::TokenLiteral() const
     return token_.Literal;
 }
 
+std::string BooleanLiteral::TokenLiteral() const
+{
+    return token_.Literal;
+}
+
 std::string_view Identifier::Type() const
 {
     return std::string_view("Identifier");
@@ -89,6 +94,11 @@ std::string_view ExpressionStatement::Type() const
     return std::string_view(temp);
 }
 
+std::string_view BooleanLiteral::Type() const
+{
+    return std::string_view("BooleanLiteral");
+}
+
 // Implement statement_node
 
 void LetStatement::statement_node() {}
@@ -100,6 +110,8 @@ void Identifier::expression_node() {}
 void IntegerLiteral::expression_node() {}
 void PrefixExpression::expression_node() {}
 void InfixExpression::expression_node() {}
+void BooleanLiteral::expression_node() {}
+
 
 // Implement String
 
@@ -173,4 +185,9 @@ std::string InfixExpression::String() const
         out << right->String();
     out << ")";
     return out.str();
+}
+
+std::string BooleanLiteral::String() const
+{
+    return token_.Literal;
 }

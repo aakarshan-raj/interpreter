@@ -126,4 +126,16 @@ public:
     std::string_view Type() const override;
 };
 
+class BooleanLiteral : public Expression
+{
+public:
+    BooleanLiteral(const Token& t):token_(t){}
+    Token token_;
+    bool value_;
+    std::string TokenLiteral() const override;
+    void expression_node() override;
+    std::string String() const override;
+    std::string_view Type() const override;
+};
+
 #endif
