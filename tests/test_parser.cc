@@ -150,7 +150,7 @@ TEST(Parser, PrefixExpressionTest)
 
         EXPECT_NE(prefixOp, nullptr) << "Expected this expression to be a an PrefixExpression, is not.";
         EXPECT_EQ(prefixOp->op, ex.op) << "PrefixExpression operator expected: " << ex.op << " , got: " << prefixOp->op;
-        EXPECT_TRUE(TestIntegerLiteral(prefixOp->right, ex.integerLiteral))<<"TestIntegerLiteral FAIL";
+        EXPECT_TRUE(TestIntegerLiteral(prefixOp->right, ex.integerLiteral)) << "TestIntegerLiteral FAIL";
     }
 }
 
@@ -231,7 +231,7 @@ TEST(Parser, infixExpressionTest)
 
         EXPECT_TRUE(TestIntegerLiteral(infixOp->left, ex.leftIntegerLiteral)) << "TestIntegerLiteral FAIL\n";
         EXPECT_EQ(infixOp->op, ex.op) << "InfixExpression operator expected: " << ex.op << " , got: " << infixOp->op;
-        EXPECT_TRUE(TestIntegerLiteral(infixOp->right, ex.rightIntegerLiteral))<<"TestIntegerLiteral FAIL\n";
+        EXPECT_TRUE(TestIntegerLiteral(infixOp->right, ex.rightIntegerLiteral)) << "TestIntegerLiteral FAIL\n";
     }
 }
 
@@ -347,4 +347,31 @@ TEST(Parser, infixExpressionSimpleTests)
 
         EXPECT_TRUE(testInfixExpression(expression, ex.leftIntegerLiteral, ex.op, ex.rightIntegerLiteral)) << "Fail";
     }
+}
+
+TEST(Parser, BooleanLiteralTest)
+{
+
+    std::string input = "true;";
+
+    std::shared_ptr<Lexer>
+        lexer = std::make_shared<Lexer>(input);
+    std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
+    std::shared_ptr<Program> program = parser->parseProgram();
+
+    EXPECT_NE(program, nullptr) << "Program is null.";
+    EXPECT_NE(program->statements_.empty(), true) << "Program has no statements.";
+    EXPECT_EQ(program->statements_.size(), 1) << "Program doesn't contain 1 statements as expected.";
+
+    auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
+
+    EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
+
+    auto boolExpr = std::dynamic_pointer_cast<BooleanLiteral>(expressionStatement->Expr);
+
+    EXPECT_NE(boolExpr, nullptr) << "Expected this expression to be a an boolExpr, is not.";
+    EXPECT_EQ(boolExpr->value_, true) << "boolExpr expected: " << input << " , got: " << boolExpr->value_;
+    EXPECT_EQ(boolExpr->TokenLiteral(), "true") << "boolExpr.TokenLiteral expected: " << input << " , got: " << boolExpr->TokenLiteral();
+
+    checkForParserErrors(parser);
 }
