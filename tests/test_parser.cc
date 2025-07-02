@@ -325,11 +325,11 @@ TEST(Parser, infixExpressionSimpleTests)
     {
         std::string expr;
         std::string op;
-        int leftIntegerLiteral;
-        int rightIntegerLiteral;
+        std::any leftIntegerLiteral;
+        std::any rightIntegerLiteral;
     };
 
-    std::vector<InfixExpressionTestStruct> input = {{"10-5", "-", 10, 5}, {"1+5", "+", 1, 5}};
+    std::vector<InfixExpressionTestStruct> input = {{"10-5", "-", 10, 5}, {"1+5", "+", 1, 5}, {"true != false", "!=", true, false}};
 
     for (auto const &ex : input)
     {
@@ -374,4 +374,83 @@ TEST(Parser, BooleanLiteralTest)
     EXPECT_EQ(boolExpr->TokenLiteral(), "true") << "boolExpr.TokenLiteral expected: " << input << " , got: " << boolExpr->TokenLiteral();
 
     checkForParserErrors(parser);
+}
+
+TEST(Parser, TestOperatorPrecedenceParsing)
+{
+
+    struct InfixExpressionTestStruct
+    {
+        std::string input;
+        std::string output;
+    };
+
+    std::vector<InfixExpressionTestStruct> input = {
+        {
+            "true",
+            "true",
+        },
+        {
+            "false",
+            "false",
+        },
+        {
+            "3 > 5 == false",
+            "((3 > 5) == false)",
+        },
+        {
+            "3 < 5 == true",
+            "((3 < 5) == true)",
+        }};
+
+    for (auto const &ex : input)
+    {
+        std::shared_ptr<Lexer>
+            lexer = std::make_shared<Lexer>(ex.input);
+        std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
+        std::shared_ptr<Program> program = parser->parseProgram();
+
+        EXPECT_EQ(program->String(), ex.output) << "Fail TestOperatorPrecedenceParsing";
+    }
+}
+
+TEST(Parser, TestParsingPrefixExpressions)
+{
+
+    struct PrefixExpressionTest
+    {
+        std::string input;
+        std::string op;
+        std::any expr;
+    };
+
+    std::vector<PrefixExpressionTest> input = {
+        {"!true;", "!", true},
+        {"!false;", "!", false},
+    };
+
+    for (auto const &ex : input)
+    {
+
+        std::shared_ptr<Lexer>
+            lexer = std::make_shared<Lexer>(ex.input);
+        std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
+        std::shared_ptr<Program> program = parser->parseProgram();
+
+        EXPECT_NE(program, nullptr) << "Program is null.";
+        EXPECT_NE(program->statements_.empty(), true) << "Program has no statements.";
+
+        checkForParserErrors(parser);
+
+        auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
+
+        EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
+
+        auto prefixExpr = std::dynamic_pointer_cast<PrefixExpression>(expressionStatement->Expr);
+        auto booleanLiteral = std::dynamic_pointer_cast<BooleanLiteral>(prefixExpr->right);
+
+        EXPECT_EQ(prefixExpr->op, ex.op) << "Failed TestParsingPrefixExpressions, Expected: " << ex.op << " , got: " << prefixExpr->op;
+        EXPECT_EQ(booleanLiteral->value_, std::any_cast<bool>(ex.expr)) << "Failed TestParsingPrefixExpressions, Expected: " << std::any_cast<bool>(ex.expr) << " , got: " << booleanLiteral->value_;
+
+    }
 }

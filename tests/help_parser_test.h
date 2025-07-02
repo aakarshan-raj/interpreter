@@ -47,6 +47,32 @@ bool TestIntegerLiteral(std::shared_ptr<Expression> intL, int value_)
     return true;
 }
 
+inline const char *boolToString(bool x)
+{
+    return x ? "true" : "false";
+}
+
+bool TestBooleanLiteral(std::shared_ptr<Expression> intL, bool value_)
+{
+    auto boolOp = std::dynamic_pointer_cast<BooleanLiteral>(intL);
+    if (!boolOp)
+    {
+        std::cerr << "Expected this expression to be a Identifier, is not.";
+        return false;
+    }
+    if (boolOp->value_ != value_)
+    {
+        std::cerr << "Boolean value is not same. Expected:" << value_ << " Got:" << boolOp->value_ << "\n";
+        return false;
+    }
+    if (boolOp->TokenLiteral() != boolToString(value_))
+    {
+        std::cerr << "\033[31mBooleanLiteral TokenLiteral() is not same. Expected:" << value_ << " Got:" << boolOp->TokenLiteral() << "\033[0m\n";
+        return false;
+    }
+    return true;
+}
+
 void TestLetStatements(std::shared_ptr<Statement> s, std::string variable_name)
 {
 
@@ -65,6 +91,8 @@ void TestLetStatements(std::shared_ptr<Statement> s, std::string variable_name)
         FAIL() << "Wrong Variable literal\nExpected:" << variable_name << "Got:" << lstmt->name_->value_;
     }
 }
+
+
 
 void checkForParserErrors(std::shared_ptr<Parser> parser)
 {
@@ -98,6 +126,10 @@ std::string typeInfo(const std::any &value)
     {
         return "STRING";
     }
+    else if (type == typeid(bool))
+    {
+        return "BOOL";
+    }
     return "UNKNOWN";
 }
 
@@ -111,6 +143,10 @@ bool testLiteralExpression(std::shared_ptr<Expression> expr, std::any &expected)
     else if (x == "STRING")
     {
         return TestIdetifier(expr, std::any_cast<std::string>(expected));
+    }
+    else if (x == "BOOL")
+    {
+        return TestBooleanLiteral(expr, std::any_cast<bool>(expected));
     }
     else
     {
@@ -147,3 +183,4 @@ bool testInfixExpression(std::shared_ptr<Expression> expr, std::any left, std::s
     }
     return true;
 }
+
