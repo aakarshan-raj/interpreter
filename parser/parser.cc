@@ -248,3 +248,16 @@ std::shared_ptr<Expression> Parser::parseBooleanLiteral(){
     }
     return expr;
 }
+
+std::shared_ptr<Expression> Parser::parseGroupedExpression(){
+    nextToken();
+
+    auto expr = parseExpression(LOWEST);
+
+    if(!peekTokenIs(RPAREN)){
+        return nullptr;
+    }
+    nextToken();
+    
+    return expr;
+}

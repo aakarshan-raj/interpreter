@@ -401,7 +401,28 @@ TEST(Parser, TestOperatorPrecedenceParsing)
         {
             "3 < 5 == true",
             "((3 < 5) == true)",
-        }};
+        },
+        {
+            "1 + (2 + 3) + 4",
+            "((1 + (2 + 3)) + 4)",
+        },
+        {
+            "(5 + 5) * 2",
+            "((5 + 5) * 2)",
+        },
+        {
+            "2 / (5 + 5)",
+            "(2 / (5 + 5))",
+        },
+        {
+            "-(5 + 5)",
+            "(-(5 + 5))",
+        },
+        {
+            "!(true == true)",
+            "(!(true == true))",
+        },
+    };
 
     for (auto const &ex : input)
     {
@@ -409,6 +430,8 @@ TEST(Parser, TestOperatorPrecedenceParsing)
             lexer = std::make_shared<Lexer>(ex.input);
         std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
         std::shared_ptr<Program> program = parser->parseProgram();
+
+        checkForParserErrors(parser);
 
         EXPECT_EQ(program->String(), ex.output) << "Fail TestOperatorPrecedenceParsing";
     }
@@ -451,6 +474,5 @@ TEST(Parser, TestParsingPrefixExpressions)
 
         EXPECT_EQ(prefixExpr->op, ex.op) << "Failed TestParsingPrefixExpressions, Expected: " << ex.op << " , got: " << prefixExpr->op;
         EXPECT_EQ(booleanLiteral->value_, std::any_cast<bool>(ex.expr)) << "Failed TestParsingPrefixExpressions, Expected: " << std::any_cast<bool>(ex.expr) << " , got: " << booleanLiteral->value_;
-
     }
 }
