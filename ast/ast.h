@@ -138,4 +138,32 @@ public:
     std::string_view Type() const override;
 };
 
+class BlockStatement : public Statement
+{
+public:
+    BlockStatement(const Token& t):token_(t){}
+    Token token_;
+    std::vector<std::shared_ptr<Statement>> statements;
+    std::string TokenLiteral() const override;
+    void statement_node() override;
+    std::string String() const override;
+    std::string_view Type() const override;
+};
+
+class IfExpression : public Expression
+{
+public:
+    IfExpression(const Token& t):token_(t){}
+    Token token_;
+    std::shared_ptr<Expression> condition_;
+    std::shared_ptr<BlockStatement> consequence_;
+    std::shared_ptr<BlockStatement> alternative_;
+    std::string TokenLiteral() const override;
+    void expression_node() override;
+    std::string String() const override;
+    std::string_view Type() const override;
+};
+
+
+
 #endif

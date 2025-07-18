@@ -53,6 +53,16 @@ std::string BooleanLiteral::TokenLiteral() const
     return token_.Literal;
 }
 
+std::string BlockStatement::TokenLiteral() const
+{
+    return token_.Literal;
+}
+
+std::string IfExpression::TokenLiteral() const
+{
+    return token_.Literal;
+}
+
 std::string_view Identifier::Type() const
 {
     return std::string_view("Identifier");
@@ -99,11 +109,22 @@ std::string_view BooleanLiteral::Type() const
     return std::string_view("BooleanLiteral");
 }
 
+std::string_view BlockStatement::Type() const
+{
+    return std::string_view("BlockStatement");
+}
+
+std::string_view IfExpression::Type() const
+{
+    return std::string_view("IfExpression");
+}
+
 // Implement statement_node
 
 void LetStatement::statement_node() {}
 void ReturnStatement::statement_node() {}
 void ExpressionStatement::statement_node() {}
+void BlockStatement::statement_node() {}
 
 // Implement expression_node
 void Identifier::expression_node() {}
@@ -111,7 +132,7 @@ void IntegerLiteral::expression_node() {}
 void PrefixExpression::expression_node() {}
 void InfixExpression::expression_node() {}
 void BooleanLiteral::expression_node() {}
-
+void IfExpression::expression_node() {}
 
 // Implement String
 
@@ -190,4 +211,31 @@ std::string InfixExpression::String() const
 std::string BooleanLiteral::String() const
 {
     return token_.Literal;
+}
+
+std::string BlockStatement::String() const
+{
+    std::ostringstream out;
+    out << "{ ";
+    for (const auto &stmt : statements)
+    {
+        stmt->String();
+        out << "\n";
+    }
+    out << "}";
+    return out.str();
+}
+
+std::string IfExpression::String() const
+{
+    std::ostringstream out;
+    out << "if ";
+    out << condition_->String() << "\n";
+    out << consequence_->String();
+    if (alternative_ != nullptr)
+    {
+        out << "else\n";
+        out << alternative_->String();
+    }
+    return out.str();
 }
