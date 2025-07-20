@@ -488,35 +488,35 @@ TEST(Parser, TestIfExpression)
     std::shared_ptr<Program> program = parser->parseProgram();
 
     EXPECT_NE(program, nullptr) << "Program is null.";
-    EXPECT_NE(program->statements_.size(), 1) << "Program should have 1 statement, have 1";
+    EXPECT_EQ(program->statements_.size(), 1) << "Program should have 1 statement";
 
     checkForParserErrors(parser);
 
     auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
     EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
 
-    auto ifExpressionStatement = std::dynamic_pointer_cast<IfExpression>(expressionStatement);
+    auto ifExpressionStatement = std::dynamic_pointer_cast<IfExpression>(expressionStatement->Expr);
     EXPECT_NE(ifExpressionStatement, nullptr) << "Expected this expresison to be IfExpression, is not.";
 
-    testInfixExpression(ifExpressionStatement->condition_, "x", ">", "y");
+    testInfixExpression(ifExpressionStatement->condition_, 'x', ">", 'y');
     auto consequnce = ifExpressionStatement->consequence_->statements;
     EXPECT_EQ(consequnce.size(), 1) << "consequnce should have only one statement, have not.";
 
     auto consequenceExpressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(consequnce[0]);
     EXPECT_NE(consequenceExpressionStatement, nullptr) << "Expected this statement to be ExpressionStatement, is not.";
 
-    auto consequenceExpression = std::dynamic_pointer_cast<Expression>(consequenceExpressionStatement);
+    auto consequenceExpression = std::dynamic_pointer_cast<Expression>(consequenceExpressionStatement->Expr);
     EXPECT_NE(consequenceExpression, nullptr) << "Expected this statement to be Expression, is not.";
 
     TestIdetifier(consequenceExpression, "x");
 
-    EXPECT_EQ(ifExpressionStatement->alternative_->statements.size(), 0) << "Expected alternative to be null in TestIfExpression test, is not";
+    EXPECT_EQ(ifExpressionStatement->alternative_, nullptr) << "Expected alternative to be null in TestIfExpression test, is not";
 }
 
 TEST(Parser, TestIfElseExpression)
 {
 
-    std::string input = "if (x > y){ x }{ y }";
+    std::string input = "if (x > y){ x } else { y }";
 
     std::shared_ptr<Lexer>
         lexer = std::make_shared<Lexer>(input);
@@ -524,24 +524,24 @@ TEST(Parser, TestIfElseExpression)
     std::shared_ptr<Program> program = parser->parseProgram();
 
     EXPECT_NE(program, nullptr) << "Program is null.";
-    EXPECT_NE(program->statements_.size(), 1) << "Program should have 1 statement, have 1";
+    EXPECT_EQ(program->statements_.size(), 1) << "Program should have 1 statement, have 1";
 
     checkForParserErrors(parser);
 
     auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
     EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
 
-    auto ifExpressionStatement = std::dynamic_pointer_cast<IfExpression>(expressionStatement);
+    auto ifExpressionStatement = std::dynamic_pointer_cast<IfExpression>(expressionStatement->Expr);
     EXPECT_NE(ifExpressionStatement, nullptr) << "Expected this expresison to be IfExpression, is not.";
 
-    testInfixExpression(ifExpressionStatement->condition_, "x", ">", "y");
+    testInfixExpression(ifExpressionStatement->condition_, 'x', ">", 'y');
     auto consequnce = ifExpressionStatement->consequence_->statements;
     EXPECT_EQ(consequnce.size(), 1) << "consequnce should have only one statement, have not.";
 
     auto consequenceExpressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(consequnce[0]);
     EXPECT_NE(consequenceExpressionStatement, nullptr) << "Expected this statement to be ExpressionStatement, is not.";
 
-    auto consequenceExpression = std::dynamic_pointer_cast<Expression>(consequenceExpressionStatement);
+    auto consequenceExpression = std::dynamic_pointer_cast<Expression>(consequenceExpressionStatement->Expr);
     EXPECT_NE(consequenceExpression, nullptr) << "Expected this statement to be Expression, is not.";
 
     TestIdetifier(consequenceExpression, "x");
@@ -552,7 +552,7 @@ TEST(Parser, TestIfElseExpression)
     auto alternativeExpressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(alternative[0]);
     EXPECT_NE(alternativeExpressionStatement, nullptr) << "Expected this statement to be ExpressionStatement, is not.";
 
-    auto alternativeExpression = std::dynamic_pointer_cast<Expression>(alternativeExpressionStatement);
+    auto alternativeExpression = std::dynamic_pointer_cast<Expression>(alternativeExpressionStatement->Expr);
     EXPECT_NE(alternativeExpression, nullptr) << "Expected this statement to be Expression, is not.";
 
     TestIdetifier(alternativeExpression, "y");

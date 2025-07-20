@@ -261,3 +261,61 @@ std::shared_ptr<Expression> Parser::parseGroupedExpression(){
     
     return expr;
 }
+
+std::shared_ptr<Expression> Parser::parseIfElseExpression(){
+
+    auto ifElseExpression = std::make_shared<IfExpression>(current_token_);
+
+    if(!expectToken(LPAREN)){
+        return nullptr;
+    }
+    nextToken();
+    auto condition = parseExpression(LOWEST);
+    
+    if(!expectToken(RPAREN)){
+        return nullptr;
+    }
+
+    if(!expectToken(LBRACE)){
+        return nullptr;
+    }
+
+    auto consequence = parseBlockStatement();
+   
+    ifElseExpression->condition_ = condition;
+    ifElseExpression->consequence_ = consequence;
+
+    if(peekTokenIs(ELSE)){
+        nextToken();
+        if(!expectToken(LBRACE)){
+            return nullptr;
+        }
+        auto alternative = parseBlockStatement();
+        ifElseExpression->alternative_ = alternative;
+    }
+
+    /*
+    IF (CONDITION){
+        CONSEQUENCE  -> PARSEBLOCKSTATEMENT
+    } ELSE {
+        ALTERNATIVE  -> PARSEBLOCKSTATEMENT
+    }
+    */
+   
+   return ifElseExpression;
+}
+
+
+std::shared_ptr<BlockStatement> Parser::parseBlockStatement(){
+
+    auto blockstmt = std::make_shared<BlockStatement>(current_token_);
+    nextToken();
+    std::cout<<"Cur:"<<current_token_;
+    while(!currentTokenIs(RBRACE) && !currentTokenIs(EOF)){
+        auto stmt = parseStatement();
+        if(stmt != nullptr)
+            blockstmt->statements.push_back(stmt);
+        nextToken();
+    }
+    return blockstmt;
+}

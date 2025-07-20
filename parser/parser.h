@@ -39,6 +39,7 @@ public:
 
         registerPrefix(BANG, std::bind(&Parser::parsePrefixExpression, this));
         registerPrefix(MINUS, std::bind(&Parser::parsePrefixExpression, this));
+        registerPrefix(IF, std::bind(&Parser::parseIfElseExpression, this));
 
         registerInfix(PLUS,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
         registerInfix(MINUS,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
@@ -67,6 +68,7 @@ private:
     std::shared_ptr<Statement> parseStatement();
     std::shared_ptr<Statement> praseLetStatement();
     std::shared_ptr<Statement> parseReturnStatement();
+    std::shared_ptr<BlockStatement> parseBlockStatement();
 
     // CORE EXPRESSION
     std::shared_ptr<ExpressionStatement> parseExpressionStatement();
@@ -79,6 +81,8 @@ private:
     std::shared_ptr<Expression> parseInfixExpression(std::shared_ptr<Expression> expr);
     std::shared_ptr<Expression> parseBooleanLiteral();
     std::shared_ptr<Expression> parseGroupedExpression();
+
+    std::shared_ptr<Expression> parseIfElseExpression();
 
     // EXPRESSION MAPPER
     void registerPrefix(const std::string &, prefixParseFn);
