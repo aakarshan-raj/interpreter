@@ -1,19 +1,18 @@
 #include "parser.h"
 
+std::unordered_map<std::string, Precedence> precedence_map =
+    {
+        {EQUALITY, EQUALS},
+        {INEQUALITY, EQUALS},
 
-std::unordered_map<std::string,Precedence> precedence_map =
-{
-    {EQUALITY,EQUALS},
-    {INEQUALITY,EQUALS},
+        {LT, LESSGREATER},
+        {GT, LESSGREATER},
 
-    {LT,LESSGREATER},
-    {GT,LESSGREATER},
+        {PLUS, SUM},
+        {MINUS, SUM},
 
-    {PLUS,SUM},
-    {MINUS,SUM},
-
-    {ASTERISK,PRODUCT},
-    {SLASH,PRODUCT},
+        {ASTERISK, PRODUCT},
+        {SLASH, PRODUCT},
 };
 
 void Parser::nextToken()
@@ -115,9 +114,10 @@ void Parser::peekError(const std::string &t)
     errors.push_back(error_message);
 }
 
-void Parser::noPrefixParseFnError(const std::string &t) {
+void Parser::noPrefixParseFnError(const std::string &t)
+{
 
-    std::string error_message = "no prefix parse function for "+t+" found";
+    std::string error_message = "no prefix parse function for " + t + " found";
     errors.push_back(error_message);
 }
 
@@ -157,13 +157,15 @@ void Parser::registerInfix(const std::string &token, infixParseFn func)
 std::shared_ptr<Expression> Parser::parseExpression(Precedence pre)
 {
     auto prefix = prefixParseFns[current_token_.Type];
-    if (prefix == nullptr){
+    if (prefix == nullptr)
+    {
         noPrefixParseFnError(current_token_.Literal);
         return nullptr;
     }
     auto leftExp = prefix();
 
-    while(!peekTokenIs(SEMICOLON) && pre < peekPrecedence()){
+    while (!peekTokenIs(SEMICOLON) && pre < peekPrecedence())
+    {
         auto infixFn = infixParseFns[peek_token_.Type];
         if (infixFn == nullptr)
             return leftExp;
@@ -189,13 +191,12 @@ std::shared_ptr<Expression> Parser::parseIntegerLiteral()
     }
     catch (const std::exception &e)
     {
-        std::string intParseError = "Error while parsing string:"+current_token_.Literal +" as int.";
-        errors.push_back(intParseError); 
+        std::string intParseError = "Error while parsing string:" + current_token_.Literal + " as int.";
+        errors.push_back(intParseError);
         return 0;
     }
     return intExpr;
 }
-
 
 std::shared_ptr<Expression> Parser::parsePrefixExpression()
 {
@@ -239,55 +240,67 @@ std::shared_ptr<Expression> Parser::parseInfixExpression(std::shared_ptr<Express
     return infixExpr;
 }
 
-std::shared_ptr<Expression> Parser::parseBooleanLiteral(){
+std::shared_ptr<Expression> Parser::parseBooleanLiteral()
+{
     std::shared_ptr<BooleanLiteral> expr = std::make_shared<BooleanLiteral>(current_token_);
-    if(current_token_.Type == TRUE){
-       expr->value_ = true;
-    } else {
-      expr->value_ = false;
+    if (current_token_.Type == TRUE)
+    {
+        expr->value_ = true;
+    }
+    else
+    {
+        expr->value_ = false;
     }
     return expr;
 }
 
-std::shared_ptr<Expression> Parser::parseGroupedExpression(){
+std::shared_ptr<Expression> Parser::parseGroupedExpression()
+{
     nextToken();
 
     auto expr = parseExpression(LOWEST);
 
-    if(!peekTokenIs(RPAREN)){
+    if (!peekTokenIs(RPAREN))
+    {
         return nullptr;
     }
     nextToken();
-    
+
     return expr;
 }
 
-std::shared_ptr<Expression> Parser::parseIfElseExpression(){
+std::shared_ptr<Expression> Parser::parseIfElseExpression()
+{
 
     auto ifElseExpression = std::make_shared<IfExpression>(current_token_);
 
-    if(!expectToken(LPAREN)){
+    if (!expectToken(LPAREN))
+    {
         return nullptr;
     }
     nextToken();
     auto condition = parseExpression(LOWEST);
-    
-    if(!expectToken(RPAREN)){
+
+    if (!expectToken(RPAREN))
+    {
         return nullptr;
     }
 
-    if(!expectToken(LBRACE)){
+    if (!expectToken(LBRACE))
+    {
         return nullptr;
     }
 
     auto consequence = parseBlockStatement();
-   
+
     ifElseExpression->condition_ = condition;
     ifElseExpression->consequence_ = consequence;
 
-    if(peekTokenIs(ELSE)){
+    if (peekTokenIs(ELSE))
+    {
         nextToken();
-        if(!expectToken(LBRACE)){
+        if (!expectToken(LBRACE))
+        {
             return nullptr;
         }
         auto alternative = parseBlockStatement();
@@ -301,21 +314,52 @@ std::shared_ptr<Expression> Parser::parseIfElseExpression(){
         ALTERNATIVE  -> PARSEBLOCKSTATEMENT
     }
     */
-   
-   return ifElseExpression;
+
+    return ifElseExpression;
 }
 
-
-std::shared_ptr<BlockStatement> Parser::parseBlockStatement(){
+std::shared_ptr<BlockStatement> Parser::parseBlockStatement()
+{
 
     auto blockstmt = std::make_shared<BlockStatement>(current_token_);
     nextToken();
-    std::cout<<"Cur:"<<current_token_;
-    while(!currentTokenIs(RBRACE) && !currentTokenIs(EOF)){
+    std::cout << "Cur:" << current_token_;
+    while (!currentTokenIs(RBRACE) && !currentTokenIs(EOF))
+    {
         auto stmt = parseStatement();
-        if(stmt != nullptr)
+        if (stmt != nullptr)
             blockstmt->statements.push_back(stmt);
         nextToken();
     }
     return blockstmt;
+}
+
+std::shared_ptr<Expression> Parser::parseFunctionLiteral()
+{
+    std::shared_ptr<FunctionLiteral> function_literal = std::make_shared<FunctionLiteral>(current_token_);
+
+    if (!expectToken(LPAREN))
+    {
+        return nullptr;
+    } 
+    nextToken();
+
+    while (current_token_.Type != RPAREN)
+    {
+        if (current_token_.Type == COMMA)
+        {
+            nextToken();
+        }
+        function_literal->parameter_.push_back(std::make_shared<Identifier>(current_token_));
+        nextToken();
+    }
+
+    if (!expectToken(LBRACE))
+    {
+        return nullptr;
+    } 
+
+    function_literal->body_ = parseBlockStatement();
+
+    return function_literal;
 }

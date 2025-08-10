@@ -92,8 +92,6 @@ void TestLetStatements(std::shared_ptr<Statement> s, std::string variable_name)
     }
 }
 
-
-
 void checkForParserErrors(std::shared_ptr<Parser> parser)
 {
     std::vector<std::string> errors = parser->logErrors();
@@ -154,7 +152,7 @@ bool testLiteralExpression(std::shared_ptr<Expression> expr, const std::any &exp
     }
 }
 
-bool testInfixExpression(std::shared_ptr<Expression> expr, std::any left, std::string op, std::any right)
+bool testInfixExpression(std::shared_ptr<Expression> expr, const std::any left, std::string op, const std::any right)
 {
     auto infixExpr = std::dynamic_pointer_cast<InfixExpression>(expr);
     if (!infixExpr)
@@ -183,4 +181,3 @@ bool testInfixExpression(std::shared_ptr<Expression> expr, std::any left, std::s
     }
     return true;
 }
-

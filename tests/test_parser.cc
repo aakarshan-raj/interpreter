@@ -561,7 +561,7 @@ TEST(Parser, TestIfElseExpression)
 TEST(Parser, TestFunctionLiteral)
 {
 
-    std::string input = "fn(x,y){ x+y; }";
+    std::string input = "fn (x,y){ x+y; }";
 
     std::shared_ptr<Lexer>
         lexer = std::make_shared<Lexer>(input);
@@ -580,13 +580,13 @@ TEST(Parser, TestFunctionLiteral)
 
     EXPECT_EQ(functionLiteral->parameter_.size(), 2) << "2 parameter expected in function parameter list.";
 
-    testLiteralExpression(functionLiteral->parameter_[0], "x");
-    testLiteralExpression(functionLiteral->parameter_[1], "y");
+    testLiteralExpression(functionLiteral->parameter_[0], 'x');
+    testLiteralExpression(functionLiteral->parameter_[1], 'y');
 
     EXPECT_EQ(functionLiteral->body_->statements.size(), 1) << "function literal body length should have been 1";
 
     auto functionLiteralBodyStatement = std::dynamic_pointer_cast<ExpressionStatement>(functionLiteral->body_->statements[0]);
     EXPECT_NE(functionLiteralBodyStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
 
-    testInfixExpression(functionLiteralBodyStatement->Expr, "x", "+", "y");
+    testInfixExpression(functionLiteralBodyStatement->Expr, 'x', "+", 'y');
 }
