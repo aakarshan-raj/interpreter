@@ -26,7 +26,8 @@ class Statement : public Node
 class Expression : public Node
 {
     virtual void expression_node() = 0;
-    public: 
+
+public:
     virtual std::string_view Type() const = 0;
 };
 
@@ -41,19 +42,18 @@ public:
 class Identifier : public Expression
 {
 public:
-    Identifier(const Token& t):token_(t),value_(t.Literal){}
+    Identifier(const Token &t) : token_(t), value_(t.Literal) {}
     Token token_;
     std::string value_;
     std::string TokenLiteral() const override;
     void expression_node() override;
     std::string String() const override;
     std::string_view Type() const override;
-
 };
 class LetStatement : public Statement
 {
 public:
-    LetStatement(const Token& t):token_(t){}
+    LetStatement(const Token &t) : token_(t) {}
     Token token_;
     std::shared_ptr<Identifier> name_;
     std::shared_ptr<Expression> value_;
@@ -63,34 +63,34 @@ public:
     std::string_view Type() const override;
 };
 
-class ReturnStatement: public Statement{
-    public:
-    ReturnStatement(const Token &t):token_(t){}
+class ReturnStatement : public Statement
+{
+public:
+    ReturnStatement(const Token &t) : token_(t) {}
     Token token_;
     std::shared_ptr<Expression> ReturnExpression;
     std::string TokenLiteral() const override;
     void statement_node() override;
     std::string String() const override;
     std::string_view Type() const override;
-
 };
 
-class ExpressionStatement: public Statement{
-    public:
-    ExpressionStatement(const Token &t):token_(t){}
+class ExpressionStatement : public Statement
+{
+public:
+    ExpressionStatement(const Token &t) : token_(t) {}
     Token token_;
     std::shared_ptr<Expression> Expr;
     std::string TokenLiteral() const override;
     void statement_node() override;
     std::string String() const override;
     std::string_view Type() const override;
-
 };
 
 class IntegerLiteral : public Expression
 {
 public:
-    IntegerLiteral(const Token& t):token_(t){}
+    IntegerLiteral(const Token &t) : token_(t) {}
     Token token_;
     int value_;
     std::string TokenLiteral() const override;
@@ -102,7 +102,7 @@ public:
 class PrefixExpression : public Expression
 {
 public:
-    PrefixExpression(const Token& t):token_(t){}
+    PrefixExpression(const Token &t) : token_(t) {}
     Token token_;
     std::string op;
     std::shared_ptr<Expression> right;
@@ -115,7 +115,7 @@ public:
 class InfixExpression : public Expression
 {
 public:
-    InfixExpression(const Token& t):token_(t){}
+    InfixExpression(const Token &t) : token_(t) {}
     Token token_;
     std::string op;
     std::shared_ptr<Expression> right;
@@ -129,7 +129,7 @@ public:
 class BooleanLiteral : public Expression
 {
 public:
-    BooleanLiteral(const Token& t):token_(t){}
+    BooleanLiteral(const Token &t) : token_(t) {}
     Token token_;
     bool value_;
     std::string TokenLiteral() const override;
@@ -141,7 +141,7 @@ public:
 class BlockStatement : public Statement
 {
 public:
-    BlockStatement(const Token& t):token_(t){}
+    BlockStatement(const Token &t) : token_(t) {}
     Token token_;
     std::vector<std::shared_ptr<Statement>> statements;
     std::string TokenLiteral() const override;
@@ -153,7 +153,7 @@ public:
 class IfExpression : public Expression
 {
 public:
-    IfExpression(const Token& t):token_(t){}
+    IfExpression(const Token &t) : token_(t) {}
     Token token_;
     std::shared_ptr<Expression> condition_;
     std::shared_ptr<BlockStatement> consequence_;
@@ -164,6 +164,17 @@ public:
     std::string_view Type() const override;
 };
 
-
+class FunctionLiteral : public Expression
+{
+public:
+    FunctionLiteral(const Token &t) : token_(t) {}
+    Token token_;
+    std::shared_ptr<BlockStatement> body_;
+    std::vector<std::shared_ptr<Identifier>> parameter_;
+    std::string TokenLiteral() const override;
+    void expression_node() override;
+    std::string String() const override;
+    std::string_view Type() const override;
+};
 
 #endif

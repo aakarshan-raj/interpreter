@@ -133,7 +133,7 @@ std::string typeInfo(const std::any &value)
     return "UNKNOWN";
 }
 
-bool testLiteralExpression(std::shared_ptr<Expression> expr, std::any &expected)
+bool testLiteralExpression(std::shared_ptr<Expression> expr, const std::any &expected)
 {
     std::string_view x = (typeInfo(expected));
     if (x == "INT")

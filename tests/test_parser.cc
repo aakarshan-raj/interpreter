@@ -524,7 +524,7 @@ TEST(Parser, TestIfElseExpression)
     std::shared_ptr<Program> program = parser->parseProgram();
 
     EXPECT_NE(program, nullptr) << "Program is null.";
-    EXPECT_EQ(program->statements_.size(), 1) << "Program should have 1 statement, have 1";
+    EXPECT_EQ(program->statements_.size(), 1) << "Program should have 1 statement, doesn't have 1";
 
     checkForParserErrors(parser);
 
@@ -556,4 +556,37 @@ TEST(Parser, TestIfElseExpression)
     EXPECT_NE(alternativeExpression, nullptr) << "Expected this statement to be Expression, is not.";
 
     TestIdetifier(alternativeExpression, "y");
+}
+
+TEST(Parser, TestFunctionLiteral)
+{
+
+    std::string input = "fn(x,y){ x+y; }";
+
+    std::shared_ptr<Lexer>
+        lexer = std::make_shared<Lexer>(input);
+    std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
+    std::shared_ptr<Program> program = parser->parseProgram();
+
+    EXPECT_EQ(program->statements_.size(), 1) << "Program should have 1 statement, doesn't have 1";
+
+    checkForParserErrors(parser);
+
+    auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
+    EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
+
+    auto functionLiteral = std::dynamic_pointer_cast<FunctionLiteral>(expressionStatement->Expr);
+    EXPECT_NE(functionLiteral, nullptr) << "Expected this expresison to be IfExpression, is not.";
+
+    EXPECT_EQ(functionLiteral->parameter_.size(), 2) << "2 parameter expected in function parameter list.";
+
+    testLiteralExpression(functionLiteral->parameter_[0], "x");
+    testLiteralExpression(functionLiteral->parameter_[1], "y");
+
+    EXPECT_EQ(functionLiteral->body_->statements.size(), 1) << "function literal body length should have been 1";
+
+    auto functionLiteralBodyStatement = std::dynamic_pointer_cast<ExpressionStatement>(functionLiteral->body_->statements[0]);
+    EXPECT_NE(functionLiteralBodyStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
+
+    testInfixExpression(functionLiteralBodyStatement->Expr, "x", "+", "y");
 }

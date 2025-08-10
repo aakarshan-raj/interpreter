@@ -63,6 +63,11 @@ std::string IfExpression::TokenLiteral() const
     return token_.Literal;
 }
 
+std::string FunctionLiteral::TokenLiteral() const
+{
+    return token_.Literal;
+}
+
 std::string_view Identifier::Type() const
 {
     return std::string_view("Identifier");
@@ -119,6 +124,11 @@ std::string_view IfExpression::Type() const
     return std::string_view("IfExpression");
 }
 
+std::string_view FunctionLiteral::Type() const
+{
+    return std::string_view("FunctionLiteral");
+}
+
 // Implement statement_node
 
 void LetStatement::statement_node() {}
@@ -133,6 +143,7 @@ void PrefixExpression::expression_node() {}
 void InfixExpression::expression_node() {}
 void BooleanLiteral::expression_node() {}
 void IfExpression::expression_node() {}
+void FunctionLiteral::expression_node() {}
 
 // Implement String
 
@@ -237,5 +248,22 @@ std::string IfExpression::String() const
         out << "else\n";
         out << alternative_->String();
     }
+    return out.str();
+}
+
+std::string FunctionLiteral::String() const
+{
+    std::ostringstream out;
+    out << TokenLiteral();
+    out << "( ";
+    for (const std::shared_ptr<Identifier> &x : parameter_)
+    {
+        out << x->TokenLiteral() << ",";
+    }
+    out << " )";
+    out << "{\n";
+    out << body_->String();
+    out << "}";
+
     return out.str();
 }
