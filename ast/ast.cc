@@ -68,6 +68,11 @@ std::string FunctionLiteral::TokenLiteral() const
     return token_.Literal;
 }
 
+std::string CallExpression::TokenLiteral() const
+{
+    return token_.Literal;
+}
+
 std::string_view Identifier::Type() const
 {
     return std::string_view("Identifier");
@@ -129,6 +134,11 @@ std::string_view FunctionLiteral::Type() const
     return std::string_view("FunctionLiteral");
 }
 
+std::string_view CallExpression::Type() const
+{
+    return std::string_view("CallExpression");
+}
+
 // Implement statement_node
 
 void LetStatement::statement_node() {}
@@ -144,6 +154,8 @@ void InfixExpression::expression_node() {}
 void BooleanLiteral::expression_node() {}
 void IfExpression::expression_node() {}
 void FunctionLiteral::expression_node() {}
+void CallExpression::expression_node() {}
+
 
 // Implement String
 
@@ -265,5 +277,18 @@ std::string FunctionLiteral::String() const
     out << body_->String();
     out << "}";
 
+    return out.str();
+}
+
+std::string CallExpression::String() const
+{
+    std::ostringstream out;
+    out << TokenLiteral();
+    out << "( ";
+    for (const std::shared_ptr<Expression> &x : arguments_)
+    {
+        out << x->TokenLiteral() << ",";
+    }
+    out << " );";
     return out.str();
 }

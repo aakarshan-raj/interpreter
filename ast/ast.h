@@ -177,4 +177,17 @@ public:
     std::string_view Type() const override;
 };
 
+class CallExpression : public Expression
+{
+public:
+    CallExpression(const Token &t) : token_(t) {}
+    Token token_;
+    std::shared_ptr<Expression> function_;
+    std::vector<std::shared_ptr<Expression>> arguments_;
+    std::string TokenLiteral() const override;
+    void expression_node() override;
+    std::string String() const override;
+    std::string_view Type() const override;
+};
+
 #endif
