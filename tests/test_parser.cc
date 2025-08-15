@@ -576,7 +576,7 @@ TEST(Parser, TestFunctionLiteral)
     EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
 
     auto functionLiteral = std::dynamic_pointer_cast<FunctionLiteral>(expressionStatement->Expr);
-    EXPECT_NE(functionLiteral, nullptr) << "Expected this expresison to be IfExpression, is not.";
+    EXPECT_NE(functionLiteral, nullptr) << "Expected this expresison to be FunctionLiteral, is not.";
 
     EXPECT_EQ(functionLiteral->parameter_.size(), 2) << "2 parameter expected in function parameter list.";
 
@@ -589,4 +589,35 @@ TEST(Parser, TestFunctionLiteral)
     EXPECT_NE(functionLiteralBodyStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
 
     testInfixExpression(functionLiteralBodyStatement->Expr, 'x', "+", 'y');
+}
+
+TEST(Parser, TestCallExpression)
+{
+
+    std::string input = "add(1,2*4,6+4)";
+
+    std::shared_ptr<Lexer>
+        lexer = std::make_shared<Lexer>(input);
+    std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
+    std::shared_ptr<Program> program = parser->parseProgram();
+
+    EXPECT_EQ(program->statements_.size(), 1) << "Program should have 1 statement, doesn't have 1";
+
+    checkForParserErrors(parser);
+
+    auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
+    EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
+
+    auto callExpression = std::dynamic_pointer_cast<CallExpression>(expressionStatement->Expr);
+    EXPECT_NE(callExpression, nullptr) << "Expected this expresison to be CallExpression, is not.";
+
+    TestIdetifier(callExpression,"add");
+
+    EXPECT_EQ(callExpression->arguments_.size(), 3) << "3 parameter expected in function parameter list.";
+
+    testLiteralExpression(callExpression->arguments_[0], 1);
+
+    testInfixExpression(callExpression->arguments_[1], '2', "*", '4');
+    testInfixExpression(callExpression->arguments_[2], '6', "+", '4');
+
 }
