@@ -387,7 +387,6 @@ std::shared_ptr<Expression> Parser::parseCallExpression(std::shared_ptr<Expressi
         callExpr->arguments_.push_back(arg_expr);
         nextToken();
     }
-    nextToken();
 
     return callExpr;
 }

@@ -422,6 +422,19 @@ TEST(Parser, TestOperatorPrecedenceParsing)
             "!(true == true)",
             "(!(true == true))",
         },
+        {
+            "a + add(b * c) + d",
+            "((a + add((b * c))) + d)",
+        },
+        {
+            "add(a, b, 1, 2 * 3, 4 + 5, add(6, 7 * 8))",
+            "add(a, b, 1, (2 * 3), (4 + 5), add(6, (7 * 8)))",
+        },
+        {
+            "add(a + b + c * d / f + g)",
+            "add((((a + b) + ((c * d) / f)) + g))",
+        },
+
     };
 
     for (auto const &ex : input)
@@ -619,4 +632,32 @@ TEST(Parser, TestCallExpression)
 
     EXPECT_TRUE(testInfixExpression(callExpression->arguments_[1], 2, "*", 4));
     EXPECT_TRUE(testInfixExpression(callExpression->arguments_[2], 6, "+", 4));
+}
+
+TEST(Parser, TestCallExpressionForPrecendence)
+{
+
+    std::string input = "add(b*c)";
+
+    std::shared_ptr<Lexer>
+        lexer = std::make_shared<Lexer>(input);
+    std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
+    std::shared_ptr<Program> program = parser->parseProgram();
+
+    EXPECT_EQ(program->statements_.size(), 1) << "Program should have 1 statement, doesn't have 1";
+
+    checkForParserErrors(parser);
+
+    auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
+    EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
+
+    auto callExpression = std::dynamic_pointer_cast<CallExpression>(expressionStatement->Expr);
+    EXPECT_NE(callExpression, nullptr) << "Expected this expresison to be CallExpression, is not.";
+
+    EXPECT_TRUE(TestIdetifier(callExpression->function_, "add")) << "TestIdetifier Fail\n";
+
+    EXPECT_EQ(callExpression->arguments_.size(), 1) << "31 parameter expected in function parameter list.";
+
+    EXPECT_TRUE(testInfixExpression(callExpression->arguments_[0], std::string("b"), "*", std::string("c")));
+    // EXPECT_TRUE(testInfixExpression(callExpression->arguments_[2], 6, "+", 4));
 }

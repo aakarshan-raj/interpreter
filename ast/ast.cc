@@ -156,7 +156,6 @@ void IfExpression::expression_node() {}
 void FunctionLiteral::expression_node() {}
 void CallExpression::expression_node() {}
 
-
 // Implement String
 
 std::string Program::String() const
@@ -284,11 +283,15 @@ std::string CallExpression::String() const
 {
     std::ostringstream out;
     out << TokenLiteral();
-    out << "( ";
+    out << "(";
     for (const std::shared_ptr<Expression> &x : arguments_)
     {
-        out << x->String() << ",";
+        out << x->String();
+        if (!(&x == &arguments_.back()))
+        {
+            out << ", ";
+        }
     }
-    out << " );";
+    out << ")";
     return out.str();
 }
