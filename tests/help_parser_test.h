@@ -116,7 +116,7 @@ std::string typeInfo(const std::any &value)
     {
         return "INT";
     }
-    else if (type == typeid(std::string))
+    else if (type == typeid(std::string) || (type == typeid(char)))
     {
         return "STRING";
     }

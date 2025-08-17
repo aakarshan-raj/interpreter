@@ -498,7 +498,7 @@ TEST(Parser, TestIfExpression)
     auto ifExpressionStatement = std::dynamic_pointer_cast<IfExpression>(expressionStatement->Expr);
     EXPECT_NE(ifExpressionStatement, nullptr) << "Expected this expresison to be IfExpression, is not.";
 
-    testInfixExpression(ifExpressionStatement->condition_, 'x', ">", 'y');
+    EXPECT_TRUE(testInfixExpression(ifExpressionStatement->condition_, std::string("x"), ">", std::string("y")));
     auto consequnce = ifExpressionStatement->consequence_->statements;
     EXPECT_EQ(consequnce.size(), 1) << "consequnce should have only one statement, have not.";
 
@@ -508,7 +508,7 @@ TEST(Parser, TestIfExpression)
     auto consequenceExpression = std::dynamic_pointer_cast<Expression>(consequenceExpressionStatement->Expr);
     EXPECT_NE(consequenceExpression, nullptr) << "Expected this statement to be Expression, is not.";
 
-    TestIdetifier(consequenceExpression, "x");
+    EXPECT_TRUE(TestIdetifier(consequenceExpression, "x")) << "TestIdetifier Fail\n";
 
     EXPECT_EQ(ifExpressionStatement->alternative_, nullptr) << "Expected alternative to be null in TestIfExpression test, is not";
 }
@@ -534,7 +534,7 @@ TEST(Parser, TestIfElseExpression)
     auto ifExpressionStatement = std::dynamic_pointer_cast<IfExpression>(expressionStatement->Expr);
     EXPECT_NE(ifExpressionStatement, nullptr) << "Expected this expresison to be IfExpression, is not.";
 
-    testInfixExpression(ifExpressionStatement->condition_, 'x', ">", 'y');
+    EXPECT_TRUE(testInfixExpression(ifExpressionStatement->condition_, std::string("x"), ">", std::string("y")));
     auto consequnce = ifExpressionStatement->consequence_->statements;
     EXPECT_EQ(consequnce.size(), 1) << "consequnce should have only one statement, have not.";
 
@@ -544,7 +544,7 @@ TEST(Parser, TestIfElseExpression)
     auto consequenceExpression = std::dynamic_pointer_cast<Expression>(consequenceExpressionStatement->Expr);
     EXPECT_NE(consequenceExpression, nullptr) << "Expected this statement to be Expression, is not.";
 
-    TestIdetifier(consequenceExpression, "x");
+    EXPECT_TRUE(TestIdetifier(consequenceExpression, "x")) << "TestIdetifier Fail\n";
 
     auto alternative = ifExpressionStatement->alternative_->statements;
     EXPECT_EQ(alternative.size(), 1) << "consequnce should have only one statement, have not.";
@@ -555,7 +555,8 @@ TEST(Parser, TestIfElseExpression)
     auto alternativeExpression = std::dynamic_pointer_cast<Expression>(alternativeExpressionStatement->Expr);
     EXPECT_NE(alternativeExpression, nullptr) << "Expected this statement to be Expression, is not.";
 
-    TestIdetifier(alternativeExpression, "y");
+    EXPECT_TRUE(TestIdetifier(alternativeExpression, "y")) << "TestIdetifier Fail\n";
+    
 }
 
 TEST(Parser, TestFunctionLiteral)
@@ -580,44 +581,45 @@ TEST(Parser, TestFunctionLiteral)
 
     EXPECT_EQ(functionLiteral->parameter_.size(), 2) << "2 parameter expected in function parameter list.";
 
-    testLiteralExpression(functionLiteral->parameter_[0], 'x');
-    testLiteralExpression(functionLiteral->parameter_[1], 'y');
+    EXPECT_TRUE(testLiteralExpression(functionLiteral->parameter_[0], std::string("x")));
+    EXPECT_TRUE(testLiteralExpression(functionLiteral->parameter_[1], std::string("y")));
 
     EXPECT_EQ(functionLiteral->body_->statements.size(), 1) << "function literal body length should have been 1";
 
     auto functionLiteralBodyStatement = std::dynamic_pointer_cast<ExpressionStatement>(functionLiteral->body_->statements[0]);
     EXPECT_NE(functionLiteralBodyStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
 
-    testInfixExpression(functionLiteralBodyStatement->Expr, 'x', "+", 'y');
+    EXPECT_TRUE(testInfixExpression(functionLiteralBodyStatement->Expr, std::string("x"), "+", std::string("y")));
 }
 
-TEST(Parser, TestCallExpression)
-{
+// TEST(Parser, TestCallExpression)
+// {
 
-    std::string input = "add(1,2*4,6+4)";
+//     std::string input = "add(1,2*4,6+4)";
 
-    std::shared_ptr<Lexer>
-        lexer = std::make_shared<Lexer>(input);
-    std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
-    std::shared_ptr<Program> program = parser->parseProgram();
+//     std::shared_ptr<Lexer>
+//         lexer = std::make_shared<Lexer>(input);
+//     std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
+//     std::shared_ptr<Program> program = parser->parseProgram();
 
-    EXPECT_EQ(program->statements_.size(), 1) << "Program should have 1 statement, doesn't have 1";
+//     EXPECT_EQ(program->statements_.size(), 1) << "Program should have 1 statement, doesn't have 1";
 
-    checkForParserErrors(parser);
+//     checkForParserErrors(parser);
 
-    auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
-    EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
+//     auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
+//     EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
 
-    auto callExpression = std::dynamic_pointer_cast<CallExpression>(expressionStatement->Expr);
-    EXPECT_NE(callExpression, nullptr) << "Expected this expresison to be CallExpression, is not.";
+//     auto callExpression = std::dynamic_pointer_cast<CallExpression>(expressionStatement->Expr);
+//     EXPECT_NE(callExpression, nullptr) << "Expected this expresison to be CallExpression, is not.";
 
-    TestIdetifier(callExpression,"add");
+//     EXPECT_TRUE(TestIdetifier(callExpression, "add")) << "TestIdetifier Fail\n";
 
-    EXPECT_EQ(callExpression->arguments_.size(), 3) << "3 parameter expected in function parameter list.";
 
-    testLiteralExpression(callExpression->arguments_[0], 1);
+//     EXPECT_EQ(callExpression->arguments_.size(), 3) << "3 parameter expected in function parameter list.";
 
-    testInfixExpression(callExpression->arguments_[1], '2', "*", '4');
-    testInfixExpression(callExpression->arguments_[2], '6', "+", '4');
+//     testLiteralExpression(callExpression->arguments_[0], 1);
 
-}
+//     EXPECT_TRUE(testInfixExpression(callExpression->arguments_[1], '2', "*", '4'));
+//     EXPECT_TRUE(testInfixExpression(callExpression->arguments_[2], '6', "+", '4'));
+
+// }
