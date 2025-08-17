@@ -267,11 +267,18 @@ std::string FunctionLiteral::String() const
     std::ostringstream out;
     out << TokenLiteral();
     out << "( ";
+
     for (const std::shared_ptr<Identifier> &x : parameter_)
     {
-        out << x->TokenLiteral() << ",";
+        out << x->String();
+        if (!(&x == &parameter_.back()))
+        {
+            out << ", ";
+        }
     }
     out << " )";
+
+
     out << "{\n";
     out << body_->String();
     out << "}";
