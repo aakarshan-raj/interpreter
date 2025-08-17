@@ -50,7 +50,7 @@ public:
         registerInfix(GT,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
         registerInfix(EQUALITY,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
         registerInfix(INEQUALITY,std::bind(&Parser::parseInfixExpression,this,std::placeholders::_1));
-
+        registerInfix(LPAREN, std::bind(&Parser::parseCallExpression, this,std::placeholders::_1));
 
     }
     std::shared_ptr<Program> parseProgram();
@@ -85,6 +85,7 @@ private:
 
     std::shared_ptr<Expression> parseIfElseExpression();
     std::shared_ptr<Expression> parseFunctionLiteral();
+    std::shared_ptr<Expression> parseCallExpression(std::shared_ptr<Expression>);
 
 
     // EXPRESSION MAPPER

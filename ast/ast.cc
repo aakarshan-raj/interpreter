@@ -287,7 +287,7 @@ std::string CallExpression::String() const
     out << "( ";
     for (const std::shared_ptr<Expression> &x : arguments_)
     {
-        out << x->TokenLiteral() << ",";
+        out << x->String() << ",";
     }
     out << " );";
     return out.str();

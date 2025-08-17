@@ -556,7 +556,6 @@ TEST(Parser, TestIfElseExpression)
     EXPECT_NE(alternativeExpression, nullptr) << "Expected this statement to be Expression, is not.";
 
     EXPECT_TRUE(TestIdetifier(alternativeExpression, "y")) << "TestIdetifier Fail\n";
-    
 }
 
 TEST(Parser, TestFunctionLiteral)
@@ -592,34 +591,32 @@ TEST(Parser, TestFunctionLiteral)
     EXPECT_TRUE(testInfixExpression(functionLiteralBodyStatement->Expr, std::string("x"), "+", std::string("y")));
 }
 
-// TEST(Parser, TestCallExpression)
-// {
+TEST(Parser, TestCallExpression)
+{
 
-//     std::string input = "add(1,2*4,6+4)";
+    std::string input = "add(1,2*4,6+4)";
 
-//     std::shared_ptr<Lexer>
-//         lexer = std::make_shared<Lexer>(input);
-//     std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
-//     std::shared_ptr<Program> program = parser->parseProgram();
+    std::shared_ptr<Lexer>
+        lexer = std::make_shared<Lexer>(input);
+    std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
+    std::shared_ptr<Program> program = parser->parseProgram();
 
-//     EXPECT_EQ(program->statements_.size(), 1) << "Program should have 1 statement, doesn't have 1";
+    EXPECT_EQ(program->statements_.size(), 1) << "Program should have 1 statement, doesn't have 1";
 
-//     checkForParserErrors(parser);
+    checkForParserErrors(parser);
 
-//     auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
-//     EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
+    auto expressionStatement = std::dynamic_pointer_cast<ExpressionStatement>(program->statements_[0]);
+    EXPECT_NE(expressionStatement, nullptr) << "Expected this statement to be a expression statement, is not.";
 
-//     auto callExpression = std::dynamic_pointer_cast<CallExpression>(expressionStatement->Expr);
-//     EXPECT_NE(callExpression, nullptr) << "Expected this expresison to be CallExpression, is not.";
+    auto callExpression = std::dynamic_pointer_cast<CallExpression>(expressionStatement->Expr);
+    EXPECT_NE(callExpression, nullptr) << "Expected this expresison to be CallExpression, is not.";
 
-//     EXPECT_TRUE(TestIdetifier(callExpression, "add")) << "TestIdetifier Fail\n";
+    EXPECT_TRUE(TestIdetifier(callExpression->function_, "add")) << "TestIdetifier Fail\n";
 
+    EXPECT_EQ(callExpression->arguments_.size(), 3) << "3 parameter expected in function parameter list.";
 
-//     EXPECT_EQ(callExpression->arguments_.size(), 3) << "3 parameter expected in function parameter list.";
+    testLiteralExpression(callExpression->arguments_[0], 1);
 
-//     testLiteralExpression(callExpression->arguments_[0], 1);
-
-//     EXPECT_TRUE(testInfixExpression(callExpression->arguments_[1], '2', "*", '4'));
-//     EXPECT_TRUE(testInfixExpression(callExpression->arguments_[2], '6', "+", '4'));
-
-// }
+    EXPECT_TRUE(testInfixExpression(callExpression->arguments_[1], 2, "*", 4));
+    EXPECT_TRUE(testInfixExpression(callExpression->arguments_[2], 6, "+", 4));
+}

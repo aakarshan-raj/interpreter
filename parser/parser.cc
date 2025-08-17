@@ -13,6 +13,7 @@ std::unordered_map<std::string, Precedence> precedence_map =
 
         {ASTERISK, PRODUCT},
         {SLASH, PRODUCT},
+        {LPAREN, CALL},
 };
 
 void Parser::nextToken()
@@ -362,4 +363,31 @@ std::shared_ptr<Expression> Parser::parseFunctionLiteral()
     function_literal->body_ = parseBlockStatement();
 
     return function_literal;
+}
+
+std::shared_ptr<Expression> Parser::parseCallExpression(std::shared_ptr<Expression> expr)
+{
+
+    auto callExpr = std::make_shared<CallExpression>(std::dynamic_pointer_cast<Identifier>(expr)->token_);
+    callExpr->function_ = expr;
+
+    if (!currentTokenIs(LPAREN))
+    {
+        return nullptr;
+    } 
+    nextToken();
+
+    while (current_token_.Type != RPAREN)
+    {
+        if (current_token_.Type == COMMA)
+        {
+            nextToken();
+        }
+        auto arg_expr = parseExpression(LOWEST);
+        callExpr->arguments_.push_back(arg_expr);
+        nextToken();
+    }
+    nextToken();
+
+    return callExpr;
 }
