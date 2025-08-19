@@ -32,15 +32,13 @@ void Repl::type_info(std::shared_ptr<Statement> statement_)
     }
     else if (auto is_let_statement = std::dynamic_pointer_cast<LetStatement>(statement_))
     {
-        // Expression part of let is not yet parsed with let statement
         std::cout << "Type is: LetStatement " << is_let_statement->name_->Type()
-                  << " = " << "NOT_YET_PARSED_WITH_THIS_STATEMENT" << std::endl;
+                  << " = " << std::dynamic_pointer_cast<Expression>(is_let_statement->value_)->Type() << std::endl;
     }
 
     else if (auto is_return_statement = std::dynamic_pointer_cast<ReturnStatement>(statement_))
     {
-        // Expression part of let is not yet parsed with return statement
-        std::cout << "Type is: ReturnStatement " << "NOT_YET_PARSED_WITH_THIS_STATEMENT"
+        std::cout << "Type is: ReturnStatement " << std::dynamic_pointer_cast<Expression>(is_return_statement->return_expression)->Type() 
                   << std::endl;
     }
     else

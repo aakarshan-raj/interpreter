@@ -67,6 +67,8 @@ std::shared_ptr<Statement> Parser::praseLetStatement()
     {
         return nullptr;
     }
+    nextToken();
+    letStatement->value_ = parseExpression(LOWEST);
 
     while (!currentTokenIs(SEMICOLON))
     {
@@ -127,8 +129,8 @@ std::shared_ptr<Statement> Parser::parseReturnStatement()
     auto stmt = std::make_shared<ReturnStatement>(current_token_);
 
     nextToken();
-
-    if (!expectToken(SEMICOLON))
+    stmt->return_expression = parseExpression(LOWEST);
+    while (!currentTokenIs(SEMICOLON))
     {
         nextToken();
     }

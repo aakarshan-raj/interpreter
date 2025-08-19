@@ -103,7 +103,7 @@ std::string_view LetStatement::Type() const
 std::string_view ReturnStatement::Type() const
 {
     std::string temp = "Return ";
-    temp.append(ReturnExpression->Type());
+    temp.append(return_expression->Type());
     return std::string_view(temp);
 }
 
@@ -177,7 +177,7 @@ std::string LetStatement::String() const
 {
     std::ostringstream out;
     out << token_.Literal << " " << name_->String() << " = ";
-    if (value_ != nullptr) // we will evaluate expression later
+    if (value_ != nullptr)
         out << value_->String();
     out << ";";
     return out.str();
@@ -187,15 +187,15 @@ std::string ReturnStatement::String() const
 {
     std::ostringstream out;
     out << token_.Literal << " ";
-    if (ReturnExpression != nullptr) // we will evaluate expression later
-        out << ReturnExpression->String();
+    if (return_expression != nullptr) 
+        out << return_expression->String();
     out << ";";
     return out.str();
 }
 
 std::string ExpressionStatement::String() const
 {
-    if (Expr != nullptr) // we will evaluate expression later
+    if (Expr != nullptr) 
         return Expr->String();
     return "";
 }

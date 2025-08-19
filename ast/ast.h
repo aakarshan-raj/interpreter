@@ -68,7 +68,7 @@ class ReturnStatement : public Statement
 public:
     ReturnStatement(const Token &t) : token_(t) {}
     Token token_;
-    std::shared_ptr<Expression> ReturnExpression;
+    std::shared_ptr<Expression> return_expression;
     std::string TokenLiteral() const override;
     void statement_node() override;
     std::string String() const override;
