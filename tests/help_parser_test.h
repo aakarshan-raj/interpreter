@@ -5,6 +5,9 @@
 #include <any>
 #include <typeinfo>
 
+bool testLiteralExpression(std::shared_ptr<Expression> , const std::any &);
+
+
 bool TestIdetifier(std::shared_ptr<Expression> iden_, std::string value_)
 {
     auto idenOp = std::dynamic_pointer_cast<Identifier>(iden_);
@@ -73,7 +76,7 @@ bool TestBooleanLiteral(std::shared_ptr<Expression> intL, bool value_)
     return true;
 }
 
-void TestLetStatements(std::shared_ptr<Statement> s, std::string variable_name)
+void TestLetStatements(std::shared_ptr<Statement> s, std::string variable_name, int expression_value)
 {
 
     if (s->TokenLiteral() != "let")
@@ -89,6 +92,10 @@ void TestLetStatements(std::shared_ptr<Statement> s, std::string variable_name)
     if (lstmt->name_->TokenLiteral() != variable_name)
     {
         FAIL() << "Wrong Variable literal\nExpected:" << variable_name << "Got:" << lstmt->name_->value_;
+    }
+    if (!testLiteralExpression(lstmt->value_,expression_value))
+    {
+        FAIL() << "Wrong expression literal\nExpected:" << expression_value << " Got:" << lstmt->value_->String();
     }
 }
 

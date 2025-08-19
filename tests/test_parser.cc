@@ -16,19 +16,30 @@ let y = 10;
 let foobar = 838383;
 let a = 3;
     )"""";
-
+    struct letStatementTestStruct
+    {
+        std::string input;
+        std::string expectedIdentifier;
+        int expectedExpression;
+    };
     std::vector<std::string> identifiers = {"x", "y", "foobar"};
+
+    std::vector<letStatementTestStruct> tests_input = {
+        {"let x = 5;", "x", 5},
+        {"let y = 10;", "y", 10},
+        {"let foobar = 838383;", "foobar", 838383},
+        {"let a = 3;", "a", 3},
+    };
 
     std::shared_ptr<Lexer> lexer = std::make_shared<Lexer>(input);
     std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
     std::shared_ptr<Program> program = parser->parseProgram();
 
-    EXPECT_NE(program, nullptr) << "Program is null.";
-    EXPECT_NE(program->statements_.empty(), true) << "Program has no statements.";
-
-    for (int i = 0; i < identifiers.size(); i++)
+    for (int i = 0; i < tests_input.size(); i++)
     {
-        TestLetStatements(program->statements_[i], identifiers[i]);
+        EXPECT_NE(program, nullptr) << "Program is null.";
+        EXPECT_NE(program->statements_.empty(), true) << "Program has no statements.";
+        TestLetStatements(program->statements_[i], tests_input[i].expectedIdentifier, tests_input[i].expectedExpression);
     }
 
     checkForParserErrors(parser);
@@ -43,6 +54,17 @@ return 10;
 return 53458934;
     )"""";
 
+    struct return_stmt_test_struct
+    {
+        std::string input;
+        std::any expr_value;
+    };
+
+    std::vector<return_stmt_test_struct> return_tests{
+        {"return x;", std::string("x")},
+        {"return 10;", 10},
+        {"return 53458934;", 53458934}};
+
     std::shared_ptr<Lexer>
         lexer = std::make_shared<Lexer>(input);
     std::shared_ptr<Parser> parser = std::make_shared<Parser>(lexer);
@@ -52,10 +74,14 @@ return 53458934;
     EXPECT_NE(program->statements_.empty(), true) << "Program has no statements.";
     EXPECT_EQ(program->statements_.size(), 3) << "Program doesn't contain 3 statements as expected.";
 
-    for (const auto &stmt : program->statements_)
+    for (int i = 0; i < return_tests.size(); i++)
     {
-        auto returnStmt = std::dynamic_pointer_cast<ReturnStatement>(stmt);
+        auto returnStmt = std::dynamic_pointer_cast<ReturnStatement>(program->statements_[i]);
         EXPECT_EQ(returnStmt->TokenLiteral(), "return") << "Return tokenLiteral expected: return, got: " << returnStmt->TokenLiteral();
+        if (!testLiteralExpression(returnStmt->return_expression, return_tests[i].expr_value))
+        {
+            FAIL() << "Return expression test fail, Got:" << returnStmt->return_expression->String();
+        }
     }
 
     checkForParserErrors(parser);
