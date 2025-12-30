@@ -18,6 +18,7 @@ void Repl::start()
             type_info(x->statements_[0]);
         }
         std::cout << x->String()<<std::endl;
+        p->printErrors();
     }
 }
 

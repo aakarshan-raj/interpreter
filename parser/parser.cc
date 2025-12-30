@@ -70,7 +70,7 @@ std::shared_ptr<Statement> Parser::praseLetStatement()
     nextToken();
     letStatement->value_ = parseExpression(LOWEST);
 
-    while (!currentTokenIs(SEMICOLON))
+    if (!currentTokenIs(SEMICOLON))
     {
         nextToken();
     }
@@ -391,4 +391,12 @@ std::shared_ptr<Expression> Parser::parseCallExpression(std::shared_ptr<Expressi
     }
 
     return callExpr;
+}
+
+void Parser::printErrors()
+{
+    for (auto &x : errors)
+    {
+        std::cout << x << std::endl;
+    }
 }

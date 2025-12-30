@@ -58,6 +58,7 @@ public:
 
     std::unordered_map<std::string, prefixParseFn> prefixParseFns;
     std::unordered_map<std::string, infixParseFn> infixParseFns;
+    void printErrors();
 
 private:
     std::shared_ptr<Lexer> lexer_;
