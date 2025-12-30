@@ -14,7 +14,9 @@ void Repl::start()
         std::shared_ptr<Parser> p = std::make_shared<Parser>(l);
         auto x = p->parseProgram();
 
-        type_info(x->statements_[0]);
+        if(!(x->statements_.empty())){
+            type_info(x->statements_[0]);
+        }
         std::cout << x->String()<<std::endl;
     }
 }
