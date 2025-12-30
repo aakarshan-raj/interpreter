@@ -395,6 +395,7 @@ std::shared_ptr<Expression> Parser::parseCallExpression(std::shared_ptr<Expressi
 
 void Parser::printErrors()
 {
+    std::cout<<"¯¯¯\_(ツ)_/¯¯¯¯ Ran into a error"<<std::endl;
     for (auto &x : errors)
     {
         std::cout << x << std::endl;
