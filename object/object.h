@@ -14,29 +14,29 @@ enum class ObjectType
 class Object
 {
 public:
-    virtual ObjectType Type();
-    virtual std::string_view Inspect();
+    virtual ObjectType Type() const = 0;
+    virtual std::string_view Inspect() const = 0;
     virtual ~Object() = default;
 };
 
 class Integer : public Object
 {
     int value;
-    ObjectType Type() override;
-    std::string_view Inspect() override;
+    ObjectType Type() const override;
+    std::string_view Inspect() const override;
 };
 
 class Boolean : public Object
 {
     bool value;
-    ObjectType Type() override;
-    std::string_view Inspect() override;
+    ObjectType Type() const override;
+    std::string_view Inspect() const override;
 };
 
 class Null : public Object
 {
-    ObjectType Type() override;
-    std::string_view Inspect() override;
+    ObjectType Type() const override;
+    std::string_view Inspect() const override;
 };
 
 #endif

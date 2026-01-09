@@ -1,32 +1,31 @@
 #include "object.h"
 
-ObjectType Integer::Type()
+ObjectType Integer::Type() const
 {
     return ObjectType::INTEGER;
 }
 
-std::string_view Integer::Inspect()
+std::string_view Integer::Inspect() const
 {
-    std::cout<<value<<std::endl;
+    std::cout << value << std::endl;
 }
 
-ObjectType Boolean::Type()
+ObjectType Boolean::Type() const
 {
     return ObjectType::BOOLEAN;
 }
 
-std::string_view Boolean::Inspect()
+std::string_view Boolean::Inspect() const
 {
-    std::cout<<value<<std::endl;
-
+    std::cout << value << std::endl;
 }
 
-ObjectType Null::Type()
+ObjectType Null::Type() const
 {
     return ObjectType::NOTHING;
 }
 
-std::string_view Null::Inspect()
+std::string_view Null::Inspect() const
 {
-    std::cout<<"null"<<std::endl;
+    std::cout << "null" << std::endl;
 }
