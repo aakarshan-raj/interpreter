@@ -8,5 +8,6 @@ add_subdirectory(lexer)
 add_subdirectory(parser)
 add_subdirectory(ast)
 add_subdirectory(object)
+add_subdirectory(evaluation)
 
-add_executable(monkey main.cc lexer/lexer.cc token/token.cc repl/repl.cc parser/parser.cc ast/ast.cc object/object.cxx)
+add_executable(monkey main.cc lexer/lexer.cc token/token.cc repl/repl.cc parser/parser.cc ast/ast.cc object/object.cxx evaluation/evaluation.cc)
