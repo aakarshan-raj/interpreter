@@ -21,20 +21,25 @@ public:
 
 class Integer : public Object
 {
-    int value;
+public:
+    explicit Integer(int value):value_(value){};
+    int value_;
     ObjectType Type() const override;
     std::string_view Inspect() const override;
 };
 
 class Boolean : public Object
 {
-    bool value;
+public:
+    explicit Boolean(int value):value_(value){};
+    bool value_;
     ObjectType Type() const override;
     std::string_view Inspect() const override;
 };
 
 class Null : public Object
 {
+public:
     ObjectType Type() const override;
     std::string_view Inspect() const override;
 };

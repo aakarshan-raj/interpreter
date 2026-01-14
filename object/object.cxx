@@ -7,7 +7,7 @@ ObjectType Integer::Type() const
 
 std::string_view Integer::Inspect() const
 {
-    std::cout << value << std::endl;
+    std::cout << value_ << std::endl;
 }
 
 ObjectType Boolean::Type() const
@@ -17,7 +17,7 @@ ObjectType Boolean::Type() const
 
 std::string_view Boolean::Inspect() const
 {
-    std::cout << value << std::endl;
+    std::cout << value_ << std::endl;
 }
 
 ObjectType Null::Type() const
