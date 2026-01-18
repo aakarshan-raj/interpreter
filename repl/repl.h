@@ -1,5 +1,6 @@
 #include "../lexer/lexer.h"
 #include "../parser/parser.h"
+#include "../evaluation/evaluation.h"
 #include <iostream>
 
 class Repl

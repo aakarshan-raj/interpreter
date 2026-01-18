@@ -14,13 +14,15 @@ void Repl::start()
         std::shared_ptr<Parser> p = std::make_shared<Parser>(l);
         auto x = p->parseProgram();
 
-        if(!(x->statements_.empty())){
-            type_info(x->statements_[0]);
-        }
-        std::cout << x->String()<<std::endl;
+        // if(!(x->statements_.empty())){
+        //     type_info(x->statements_[0]);
+        // }
+        // std::cout << x->String()<<std::endl;
         if(p->numberOfErrors() != 0){
             p->printErrors();
         }
+        auto evaluated = Eval(x->statements_[0]);
+        evaluated->Inspect();
     }
 }
 
