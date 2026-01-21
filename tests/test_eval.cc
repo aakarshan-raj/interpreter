@@ -52,8 +52,19 @@ void TestEvalBooleanExpression()
     }
 }
 
+void TestBangOperatorEvaluation()
+{
+    std::vector<InputOutput<bool>> tests = {{"!true", false}, {"!false", true}};
+    for (auto &i : tests)
+    {
+        auto x = TestEval(i.input);
+        TestObjects<bool, Boolean>(x, i.output);
+    }
+}
+
 TEST(Evaluation, TestEvalIntegerExpression)
 {
     TestEvalIntegerExpression();
     TestEvalBooleanExpression();
+    TestBangOperatorEvaluation();
 }
