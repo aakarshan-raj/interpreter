@@ -54,7 +54,7 @@ void TestEvalBooleanExpression()
 
 void TestBangOperatorEvaluation()
 {
-    std::vector<InputOutput<bool>> tests = {{"!true", false}, {"!false", true}};
+    std::vector<InputOutput<bool>> tests = {{"!true", false}, {"!false", true}, {"!1", false}, {"!!1", true}};
     for (auto &i : tests)
     {
         auto x = TestEval(i.input);

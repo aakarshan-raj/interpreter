@@ -14,13 +14,14 @@ void Repl::start()
         std::shared_ptr<Parser> p = std::make_shared<Parser>(l);
         auto x = p->parseProgram();
 
-        // if(!(x->statements_.empty())){
-        //     type_info(x->statements_[0]);
-        // }
-        // std::cout << x->String()<<std::endl;
+        if(!(x->statements_.empty())){
+            type_info(x->statements_[0]);
+        }
+        std::cout << x->String()<<std::endl;
         if(p->numberOfErrors() != 0){
             p->printErrors();
         }
+        std::cout<<"Evaluation:\n";
         auto evaluated = Eval(x->statements_[0]);
         evaluated->Inspect();
     }
@@ -33,7 +34,7 @@ void Repl::type_info(std::shared_ptr<Statement> statement_)
     {
         auto is_expression = std::dynamic_pointer_cast<Expression>(is_expression_statement->Expr);
         if (is_expression)
-            std::cout << "Type is:" << is_expression->Type() << std::endl;
+            std::cout << "Node Type is:" << is_expression->Type() << std::endl;
         else
             std::cout << "Not a Expression" << std::endl;
     }

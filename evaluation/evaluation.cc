@@ -1,5 +1,34 @@
 #include "evaluation.h"
 
+
+std::shared_ptr<Object> EvalBangOperatorExpression(std::shared_ptr<Object> right)
+{
+    std::cout<<"Eval !"<<std::endl;
+    return nullptr;
+}
+
+std::shared_ptr<Object> EvalMinusOperatorExpression(std::shared_ptr<Object> right)
+{
+    std::cout<<"Eval -"<<std::endl;
+    return nullptr;
+}
+
+std::shared_ptr<Object> EvalPrefixExpression(std::string op, std::shared_ptr<Object> right)
+{
+    if (op == "!")
+    {
+        return EvalBangOperatorExpression(right);
+    }
+    else if (op == "-")
+    {
+        return EvalMinusOperatorExpression(right);
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
 std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
 {
     auto expr_stat = std::dynamic_pointer_cast<ExpressionStatement>(node);
@@ -15,5 +44,11 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
         }
         return native_false;
     }
+    if (auto prefix_expr = std::dynamic_pointer_cast<PrefixExpression>(expr_stat->Expr))
+    {
+        auto prefix_obj = Eval(prefix_expr->right);
+        return EvalPrefixExpression(prefix_expr->op, prefix_obj);
+    }
+
     return 0;
 }
