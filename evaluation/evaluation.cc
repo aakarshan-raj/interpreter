@@ -1,15 +1,14 @@
 #include "evaluation.h"
 
-
 std::shared_ptr<Object> EvalBangOperatorExpression(std::shared_ptr<Object> right)
 {
-    std::cout<<"Eval !"<<std::endl;
+    std::cout << "Eval !" << std::endl;
     return nullptr;
 }
 
 std::shared_ptr<Object> EvalMinusOperatorExpression(std::shared_ptr<Object> right)
 {
-    std::cout<<"Eval -"<<std::endl;
+    std::cout << "Eval -" << std::endl;
     return nullptr;
 }
 
@@ -29,14 +28,31 @@ std::shared_ptr<Object> EvalPrefixExpression(std::string op, std::shared_ptr<Obj
     }
 }
 
+std::shared_ptr<Object> EvalStatement(std::vector<std::shared_ptr<Statement>> statements)
+{
+    std::shared_ptr<Object> statement_eval;
+    for (auto single_statement : statements)
+    {
+        statement_eval = Eval(single_statement);
+    }
+    return statement_eval;
+}
+
 std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
 {
-    auto expr_stat = std::dynamic_pointer_cast<ExpressionStatement>(node);
-    if (auto inte_lit = std::dynamic_pointer_cast<IntegerLiteral>(expr_stat->Expr))
+    if (auto expr_stat = std::dynamic_pointer_cast<ExpressionStatement>(node))
+    {
+        return Eval(expr_stat->Expr);
+    }
+    if (auto program = std::dynamic_pointer_cast<Program>(node))
+    {
+        return EvalStatement(program->statements_);
+    }
+    if (auto inte_lit = std::dynamic_pointer_cast<IntegerLiteral>(node))
     {
         return std::make_shared<Integer>(inte_lit->value_);
     }
-    if (auto bool_lit = std::dynamic_pointer_cast<BooleanLiteral>(expr_stat->Expr))
+    if (auto bool_lit = std::dynamic_pointer_cast<BooleanLiteral>(node))
     {
         if (bool_lit->value_)
         {
@@ -44,7 +60,7 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
         }
         return native_false;
     }
-    if (auto prefix_expr = std::dynamic_pointer_cast<PrefixExpression>(expr_stat->Expr))
+    if (auto prefix_expr = std::dynamic_pointer_cast<PrefixExpression>(node))
     {
         auto prefix_obj = Eval(prefix_expr->right);
         return EvalPrefixExpression(prefix_expr->op, prefix_obj);
