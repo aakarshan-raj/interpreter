@@ -2,14 +2,20 @@
 
 std::shared_ptr<Object> EvalBangOperatorExpression(std::shared_ptr<Object> right)
 {
-    std::cout << "Eval !" << std::endl;
-    return nullptr;
+    if (right == native_true)
+        return native_false;
+    if (right == native_false)
+        return native_true;
+    if (right == native_null)
+        return native_true;
+    return native_false;
 }
 
 std::shared_ptr<Object> EvalMinusOperatorExpression(std::shared_ptr<Object> right)
 {
-    std::cout << "Eval -" << std::endl;
-    return nullptr;
+    if (right->Type() != ObjectType::INTEGER)
+        return nullptr;
+    return std::make_shared<Integer>(-std::dynamic_pointer_cast<Integer>(right)->value_);
 }
 
 std::shared_ptr<Object> EvalPrefixExpression(std::string op, std::shared_ptr<Object> right)

@@ -34,7 +34,7 @@ std::shared_ptr<Object> TestEval(std::string &input)
 
 void TestEvalIntegerExpression()
 {
-    std::vector<InputOutput<int>> tests = {{"5", 5}, {"10", 10}};
+    std::vector<InputOutput<int>> tests = {{"5", 5}, {"10", 10}, {"-10", -10}, {"-0", 0}};
     for (auto &i : tests)
     {
         auto x = TestEval(i.input);
