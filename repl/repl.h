@@ -10,6 +10,6 @@ private:
     char repl_char_;
 
 public:
-    void start();
+    void start(bool);
     void type_info(std::shared_ptr<Statement>);
 };

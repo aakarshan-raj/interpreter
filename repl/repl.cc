@@ -1,6 +1,6 @@
 #include "repl.h"
 
-void Repl::start()
+void Repl::start(bool PRINT_DEBUG_INFO)
 {
 
     while (true)
@@ -14,14 +14,20 @@ void Repl::start()
         std::shared_ptr<Parser> p = std::make_shared<Parser>(l);
         auto x = p->parseProgram();
 
-        if(!(x->statements_.empty())){
-            type_info(x->statements_[0]);
+        if (PRINT_DEBUG_INFO)
+        {
+            if (!(x->statements_.empty()))
+            {
+                type_info(x->statements_[0]);
+            }
+            std::cout << x->String() << std::endl;
+            if (p->numberOfErrors() != 0)
+            {
+                p->printErrors();
+            }
+            std::cout << "Evaluation:\n";
         }
-        std::cout << x->String()<<std::endl;
-        if(p->numberOfErrors() != 0){
-            p->printErrors();
-        }
-        std::cout<<"Evaluation:\n";
+
         auto evaluated = Eval(x->statements_[0]);
         evaluated->Inspect();
     }
@@ -46,7 +52,7 @@ void Repl::type_info(std::shared_ptr<Statement> statement_)
 
     else if (auto is_return_statement = std::dynamic_pointer_cast<ReturnStatement>(statement_))
     {
-        std::cout << "Type is: ReturnStatement " << std::dynamic_pointer_cast<Expression>(is_return_statement->return_expression)->Type() 
+        std::cout << "Type is: ReturnStatement " << std::dynamic_pointer_cast<Expression>(is_return_statement->return_expression)->Type()
                   << std::endl;
     }
     else
