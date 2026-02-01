@@ -70,15 +70,35 @@ std::shared_ptr<Object> EvalDivisionOperation(std::shared_ptr<Object> left, std:
 
 std::shared_ptr<Object> EvalEqualityOperation(std::shared_ptr<Object> left, std::shared_ptr<Object> right)
 {
+    if (left->Type() != ObjectType::INTEGER && right->Type() != ObjectType::INTEGER)
+        return nullptr;
+    return std::make_shared<Boolean>(
+        std::dynamic_pointer_cast<Integer>(left)->value_ ==
+        std::dynamic_pointer_cast<Integer>(right)->value_);
 }
 std::shared_ptr<Object> EvalInEqualityOperation(std::shared_ptr<Object> left, std::shared_ptr<Object> right)
 {
+    if (left->Type() != ObjectType::INTEGER && right->Type() != ObjectType::INTEGER)
+        return nullptr;
+    return std::make_shared<Boolean>(
+        std::dynamic_pointer_cast<Integer>(left)->value_ !=
+        std::dynamic_pointer_cast<Integer>(right)->value_);
 }
 std::shared_ptr<Object> EvalLessThanOperation(std::shared_ptr<Object> left, std::shared_ptr<Object> right)
 {
+    if (left->Type() != ObjectType::INTEGER && right->Type() != ObjectType::INTEGER)
+        return nullptr;
+    return std::make_shared<Boolean>(
+        std::dynamic_pointer_cast<Integer>(left)->value_ <
+        std::dynamic_pointer_cast<Integer>(right)->value_);
 }
 std::shared_ptr<Object> EvalGreaterThanOperation(std::shared_ptr<Object> left, std::shared_ptr<Object> right)
 {
+    if (left->Type() != ObjectType::INTEGER && right->Type() != ObjectType::INTEGER)
+        return nullptr;
+    return std::make_shared<Boolean>(
+        std::dynamic_pointer_cast<Integer>(left)->value_ >
+        std::dynamic_pointer_cast<Integer>(right)->value_);
 }
 
 std::shared_ptr<Object> EvalInfixExpression(std::shared_ptr<Object> left,
