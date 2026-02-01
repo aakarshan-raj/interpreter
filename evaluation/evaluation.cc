@@ -11,6 +11,15 @@ std::shared_ptr<Object> EvalBangOperatorExpression(std::shared_ptr<Object> right
     return native_false;
 }
 
+std::shared_ptr<Boolean> EvalToNativeBoolean(bool EvalBool)
+{
+    if (EvalBool)
+    {
+        return native_true;
+    }
+    return native_false;
+}
+
 std::shared_ptr<Object> EvalMinusOperatorExpression(std::shared_ptr<Object> right)
 {
     if (right->Type() != ObjectType::INTEGER)
@@ -70,25 +79,37 @@ std::shared_ptr<Object> EvalDivisionOperation(std::shared_ptr<Object> left, std:
 
 std::shared_ptr<Object> EvalEqualityOperation(std::shared_ptr<Object> left, std::shared_ptr<Object> right)
 {
-    if (left->Type() != ObjectType::INTEGER && right->Type() != ObjectType::INTEGER)
-        return nullptr;
-    return std::make_shared<Boolean>(
-        std::dynamic_pointer_cast<Integer>(left)->value_ ==
-        std::dynamic_pointer_cast<Integer>(right)->value_);
+    if (left->Type() == ObjectType::INTEGER && right->Type() == ObjectType::INTEGER)
+    {
+        return EvalToNativeBoolean(
+            std::dynamic_pointer_cast<Integer>(left)->value_ ==
+            std::dynamic_pointer_cast<Integer>(right)->value_);
+    }
+    else if (left->Type() == ObjectType::BOOLEAN && right->Type() == ObjectType::BOOLEAN)
+    {
+        return EvalToNativeBoolean(left == right);
+    }
 }
+
 std::shared_ptr<Object> EvalInEqualityOperation(std::shared_ptr<Object> left, std::shared_ptr<Object> right)
 {
-    if (left->Type() != ObjectType::INTEGER && right->Type() != ObjectType::INTEGER)
-        return nullptr;
-    return std::make_shared<Boolean>(
-        std::dynamic_pointer_cast<Integer>(left)->value_ !=
-        std::dynamic_pointer_cast<Integer>(right)->value_);
+    if (left->Type() == ObjectType::INTEGER && right->Type() == ObjectType::INTEGER)
+    {
+        return EvalToNativeBoolean(
+            std::dynamic_pointer_cast<Integer>(left)->value_ !=
+            std::dynamic_pointer_cast<Integer>(right)->value_);
+    }
+    else if (left->Type() == ObjectType::BOOLEAN && right->Type() == ObjectType::BOOLEAN)
+    {
+        return EvalToNativeBoolean(left != right);
+    }
 }
+
 std::shared_ptr<Object> EvalLessThanOperation(std::shared_ptr<Object> left, std::shared_ptr<Object> right)
 {
     if (left->Type() != ObjectType::INTEGER && right->Type() != ObjectType::INTEGER)
         return nullptr;
-    return std::make_shared<Boolean>(
+    return EvalToNativeBoolean(
         std::dynamic_pointer_cast<Integer>(left)->value_ <
         std::dynamic_pointer_cast<Integer>(right)->value_);
 }
@@ -96,7 +117,7 @@ std::shared_ptr<Object> EvalGreaterThanOperation(std::shared_ptr<Object> left, s
 {
     if (left->Type() != ObjectType::INTEGER && right->Type() != ObjectType::INTEGER)
         return nullptr;
-    return std::make_shared<Boolean>(
+    return EvalToNativeBoolean(
         std::dynamic_pointer_cast<Integer>(left)->value_ >
         std::dynamic_pointer_cast<Integer>(right)->value_);
 }
