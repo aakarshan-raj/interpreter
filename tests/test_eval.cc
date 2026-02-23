@@ -6,20 +6,22 @@
 #include "../evaluation/evaluation.h"
 #include <string>
 #include <memory>
+#include <variant>
+#include <optional>
 
 template <typename T>
 struct InputOutput
 {
     std::string input;
-    T output;
+    std::optional<T> output;
 };
 
 template <typename T, typename U>
-void TestObjects(std::shared_ptr<Object> obj, T expected)
+void TestObjects(std::shared_ptr<Object> obj, std::optional<T> expected)
 {
     auto _obj = std::dynamic_pointer_cast<U>(obj);
     ASSERT_NE(_obj, nullptr) << "Object is not of expected type";
-    EXPECT_EQ(_obj->value_, expected) << "Expected value to be:" << expected << " Is:" << _obj->value_;
+    EXPECT_EQ(_obj->value_, expected) << "Expected value to be:" << *expected << " Is:" << _obj->value_;
 }
 
 std::shared_ptr<Object> TestEval(std::string &input)
@@ -99,7 +101,21 @@ void TestBangOperatorEvaluation()
     }
 }
 
-TEST(Evaluation, TestEvalIntegerExpression)
+void TestIfElseExpression()
+{
+    std::vector<InputOutput<int>> tests = {
+        {"if ( 1 > 10 ) { 10 } else { 1 }", 10},
+        {"if ( 10 ) { 0 } else { 10 }", 0},
+        {"if ( false ) { 10 }", std::nullopt},
+        {"if( 10 ) { 10 }", true}};
+    for (auto &i : tests)
+    {
+        auto x = TestEval(i.input);
+        TestObjects<int, Boolean>(x, i.output);
+    }
+}
+
+TEST(Evaluation, TestEvalExpression)
 {
     TestEvalIntegerExpression();
     TestEvalBooleanExpression();
