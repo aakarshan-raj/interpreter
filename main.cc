@@ -7,9 +7,11 @@ int main(int args, char **argc)
     if (args > 1)
     {
 
-        if (std::string(argc[1]) == "debug")
+        if (std::string(argc[1]) == "--debug")
         {
             PRINT_DEBUG_INFO = true;
+        } else{
+            std::cout<<"unknown flag: "<<std::string(argc[1])<<std::endl;
         }
     }
 
