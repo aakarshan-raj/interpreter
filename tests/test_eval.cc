@@ -24,6 +24,11 @@ void TestObjects(std::shared_ptr<Object> obj, std::optional<T> expected)
     EXPECT_EQ(_obj->value_, expected) << "Expected value to be:" << *expected << " Is:" << _obj->value_;
 }
 
+void TestNullObjects(std::shared_ptr<Object> obj)
+{
+    EXPECT_EQ(obj, nullptr) << "Expected value to be: NULL, it not";
+}
+
 std::shared_ptr<Object> TestEval(std::string &input)
 {
 
@@ -107,11 +112,18 @@ void TestIfElseExpression()
         {"if ( 1 > 10 ) { 10 } else { 1 }", 10},
         {"if ( 10 ) { 0 } else { 10 }", 0},
         {"if ( false ) { 10 }", std::nullopt},
-        {"if( 10 ) { 10 }", true}};
+        {"if( 10 ) { 10 }", 10}};
     for (auto &i : tests)
     {
         auto x = TestEval(i.input);
-        TestObjects<int, Boolean>(x, i.output);
+        if (i.output.has_value())
+        {
+            TestObjects<int, Integer>(x, i.output);
+        }
+        else
+        {
+            TestNullObjects(x);
+        }
     }
 }
 
@@ -120,4 +132,5 @@ TEST(Evaluation, TestEvalExpression)
     TestEvalIntegerExpression();
     TestEvalBooleanExpression();
     TestBangOperatorEvaluation();
+    // TestIfElseExpression();
 }
