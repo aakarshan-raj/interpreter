@@ -109,7 +109,7 @@ void TestBangOperatorEvaluation()
 void TestIfElseExpression()
 {
     std::vector<InputOutput<int>> tests = {
-        {"if ( 1 > 10 ) { 10 } else { 1 }", 10},
+        {"if ( 1 > 10 ) { 1 } else { 10 }", 10},
         {"if ( 10 ) { 0 } else { 10 }", 0},
         {"if ( false ) { 10 }", std::nullopt},
         {"if( 10 ) { 10 }", 10}};
@@ -132,5 +132,5 @@ TEST(Evaluation, TestEvalExpression)
     TestEvalIntegerExpression();
     TestEvalBooleanExpression();
     TestBangOperatorEvaluation();
-    // TestIfElseExpression();
+    TestIfElseExpression();
 }

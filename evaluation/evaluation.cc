@@ -170,6 +170,43 @@ std::shared_ptr<Object> EvalStatement(std::vector<std::shared_ptr<Statement>> st
     return statement_eval;
 }
 
+bool isTrue(std::shared_ptr<Object> condition_)
+{
+    if (auto expr_ = std::dynamic_pointer_cast<Null>(condition_))
+    {
+        return false;
+    }
+    else if (auto expr_ = std::dynamic_pointer_cast<Boolean>(condition_))
+    {
+        if (expr_->value_)
+        {
+            return true;
+        }
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+std::shared_ptr<Object> EvalIfExpression(std::shared_ptr<IfExpression> ifExpression)
+{
+    auto condition_eval_ = Eval(ifExpression->condition_); // currenly it will be: a int, false, true, null
+    if (isTrue(condition_eval_))
+    {
+        return Eval(ifExpression->consequence_);
+    }
+    else if (ifExpression != nullptr)
+    {
+        return Eval(ifExpression->alternative_);
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
 std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
 {
     if (auto expr_stat = std::dynamic_pointer_cast<ExpressionStatement>(node))
@@ -192,6 +229,15 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
         }
         return native_false;
     }
+    if (auto bool_lit = std::dynamic_pointer_cast<BlockStatement>(node))
+    {
+        return EvalStatement(bool_lit->statements);
+    }
+    if (auto bool_lit = std::dynamic_pointer_cast<IfExpression>(node))
+    {
+        return EvalIfExpression(bool_lit);
+    }
+
     if (auto prefix_expr = std::dynamic_pointer_cast<PrefixExpression>(node))
     {
         auto prefix_obj = Eval(prefix_expr->right);
