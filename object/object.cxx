@@ -29,3 +29,13 @@ std::string_view Null::Inspect() const
 {
     std::cout << "null" << std::endl;
 }
+
+ObjectType ReturnValue::Type() const
+{
+    return ObjectType::RETURN_VALUE;
+}
+
+std::string_view ReturnValue::Inspect() const
+{
+    return value_->Inspect();
+}
