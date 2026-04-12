@@ -13,6 +13,8 @@ enum class ObjectType
     RETURN_VALUE
 };
 
+std::ostream& operator<<(std::ostream& os, ObjectType type);
+
 class Object
 {
 public:

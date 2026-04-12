@@ -11,3 +11,4 @@ add_subdirectory(object)
 add_subdirectory(evaluation)
 
 add_executable(monkey main.cc lexer/lexer.cc token/token.cc repl/repl.cc parser/parser.cc ast/ast.cc object/object.cxx evaluation/evaluation.cc)
+#target_compile_options(monkey PRIVATE -Wall -Wextra -Werror)

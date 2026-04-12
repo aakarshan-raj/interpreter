@@ -127,10 +127,27 @@ void TestIfElseExpression()
     }
 }
 
+void TestReturnStatement()
+{
+    std::vector<InputOutput<int>> tests = {
+        {"return 10;", 10},
+        {"return 10; 9;", 10},
+        {"return 2 * 5; 9;", 10},
+        {"9; return 2 * 5; 9;", 10},
+    };
+
+    for (auto &i : tests)
+    {
+        auto x = TestEval(i.input);
+        TestObjects<int, ReturnValue>(x, i.output);
+    }
+}
+
 TEST(Evaluation, TestEvalExpression)
 {
     TestEvalIntegerExpression();
     TestEvalBooleanExpression();
     TestBangOperatorEvaluation();
     TestIfElseExpression();
+    TestReturnStatement();
 }

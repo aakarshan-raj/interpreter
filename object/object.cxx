@@ -39,3 +39,26 @@ std::string_view ReturnValue::Inspect() const
 {
     return value_->Inspect();
 }
+
+std::ostream& operator<<(std::ostream& os, ObjectType type)
+{
+    switch (type)
+    {
+        case ObjectType::INTEGER:
+            os << "INTEGER";
+            break;
+        case ObjectType::BOOLEAN:
+            os << "BOOLEAN";
+            break;
+        case ObjectType::NOTHING:
+            os << "NOTHING";
+            break;
+        case ObjectType::RETURN_VALUE:
+            os << "RETURN_VALUE";
+            break;
+        default:
+            os << "UNKNOWN";
+            break;
+    }
+    return os;
+}

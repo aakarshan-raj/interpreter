@@ -166,6 +166,10 @@ std::shared_ptr<Object> EvalStatement(std::vector<std::shared_ptr<Statement>> st
     for (auto single_statement : statements)
     {
         statement_eval = Eval(single_statement);
+        if (auto return_val = std::dynamic_pointer_cast<ReturnValue>(statement_eval))
+        {
+            return return_val->value_;
+        }
     }
     return statement_eval;
 }
@@ -229,15 +233,19 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
         }
         return native_false;
     }
-    if (auto bool_lit = std::dynamic_pointer_cast<BlockStatement>(node))
+    if (auto block_lit = std::dynamic_pointer_cast<BlockStatement>(node))
     {
-        return EvalStatement(bool_lit->statements);
+        return EvalStatement(block_lit->statements);
     }
-    if (auto bool_lit = std::dynamic_pointer_cast<IfExpression>(node))
+    if (auto cond_lit = std::dynamic_pointer_cast<IfExpression>(node))
     {
-        return EvalIfExpression(bool_lit);
+        return EvalIfExpression(cond_lit);
     }
-
+    if (auto return_lit = std::dynamic_pointer_cast<ReturnStatement>(node))
+    {
+        auto val = Eval(return_lit->return_expression);
+        return std::make_shared<ReturnValue>(val);
+    }
     if (auto prefix_expr = std::dynamic_pointer_cast<PrefixExpression>(node))
     {
         auto prefix_obj = Eval(prefix_expr->right);
