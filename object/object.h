@@ -35,7 +35,7 @@ public:
 class Boolean : public Object
 {
 public:
-    explicit Boolean(int value) : value_(value) {};
+    explicit Boolean(bool value) : value_(value) {};
     bool value_;
     ObjectType Type() const override;
     std::string_view Inspect() const override;

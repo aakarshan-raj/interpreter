@@ -36,7 +36,7 @@ std::shared_ptr<Object> TestEval(std::string &input)
     std::shared_ptr<Parser> p = std::make_shared<Parser>(l);
     auto parsed_program = p->parseProgram();
 
-    return Eval(parsed_program->statements_[0]);
+    return Eval(parsed_program);
 }
 
 void TestEvalIntegerExpression()
@@ -131,6 +131,7 @@ void TestReturnStatement()
 {
     std::vector<InputOutput<int>> tests = {
         {"return 10;", 10},
+        {"10;return 9;", 9},
         {"return 10; 9;", 10},
         {"return 2 * 5; 9;", 10},
         {"9; return 2 * 5; 9;", 10},

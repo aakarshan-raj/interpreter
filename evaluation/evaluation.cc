@@ -168,7 +168,7 @@ std::shared_ptr<Object> EvalStatement(std::vector<std::shared_ptr<Statement>> st
         statement_eval = Eval(single_statement);
         if (auto return_val = std::dynamic_pointer_cast<ReturnValue>(statement_eval))
         {
-            return return_val->value_;
+            return return_val;
         }
     }
     return statement_eval;
