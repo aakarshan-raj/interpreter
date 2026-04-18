@@ -24,6 +24,20 @@ void TestObjects(std::shared_ptr<Object> obj, std::optional<T> expected)
     EXPECT_EQ(_obj->value_, expected) << "Expected value to be:" << *expected << " Is:" << _obj->value_;
 }
 
+template <typename T, typename U>
+void TestReturnValueObjects(std::shared_ptr<Object> obj, std::optional<T> expected)
+{
+    auto _obj = std::dynamic_pointer_cast<U>(obj);
+    ASSERT_NE(_obj, nullptr) << "Object is not of expected type";
+
+    auto _int = std::dynamic_pointer_cast<Integer>(_obj->value_);
+    ASSERT_NE(_int, nullptr) << "Object is not of expected type";
+
+
+    EXPECT_EQ(_int->value_, expected) << "Expected value to be:" << *expected << " Is:" << _obj->value_;
+}
+
+
 void TestNullObjects(std::shared_ptr<Object> obj)
 {
     EXPECT_EQ(obj, nullptr) << "Expected value to be: NULL, it not";
@@ -140,7 +154,7 @@ void TestReturnStatement()
     for (auto &i : tests)
     {
         auto x = TestEval(i.input);
-        TestObjects<int, ReturnValue>(x, i.output);
+        TestReturnValueObjects<int, ReturnValue>(x, i.output);
     }
 }
 
