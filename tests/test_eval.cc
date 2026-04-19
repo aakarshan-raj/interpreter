@@ -33,10 +33,8 @@ void TestReturnValueObjects(std::shared_ptr<Object> obj, std::optional<T> expect
     auto _int = std::dynamic_pointer_cast<Integer>(_obj->value_);
     ASSERT_NE(_int, nullptr) << "Object is not of expected type";
 
-
     EXPECT_EQ(_int->value_, expected) << "Expected value to be:" << *expected << " Is:" << _obj->value_;
 }
-
 
 void TestNullObjects(std::shared_ptr<Object> obj)
 {
@@ -149,6 +147,8 @@ void TestReturnStatement()
         {"return 10; 9;", 10},
         {"return 2 * 5; 9;", 10},
         {"9; return 2 * 5; 9;", 10},
+        {"if (10 > 1) { if (10 > 1) { return 10; } return 1;}", 10},
+
     };
 
     for (auto &i : tests)
