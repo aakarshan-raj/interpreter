@@ -201,7 +201,7 @@ std::shared_ptr<Object> EvalIfExpression(std::shared_ptr<IfExpression> ifExpress
     {
         return Eval(ifExpression->consequence_);
     }
-    else if (ifExpression != nullptr)
+    else if (ifExpression->alternative_ != nullptr)
     {
         return Eval(ifExpression->alternative_);
     }
