@@ -56,9 +56,22 @@ std::ostream& operator<<(std::ostream& os, ObjectType type)
         case ObjectType::RETURN_VALUE:
             os << "RETURN_VALUE";
             break;
+        case ObjectType::ERROR:
+            os << "ERROR";
+            break;
         default:
             os << "UNKNOWN";
             break;
     }
     return os;
+}
+
+ObjectType Error::Type() const
+{
+    return ObjectType::ERROR;
+}
+
+std::string_view Error::Inspect() const
+{
+    return message_;
 }

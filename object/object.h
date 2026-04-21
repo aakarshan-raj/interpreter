@@ -10,7 +10,8 @@ enum class ObjectType
     INTEGER,
     BOOLEAN,
     NOTHING,
-    RETURN_VALUE
+    RETURN_VALUE,
+    ERROR
 };
 
 std::ostream& operator<<(std::ostream& os, ObjectType type);
@@ -53,6 +54,15 @@ class ReturnValue : public Object
 public:
     explicit ReturnValue(std::shared_ptr<Object> value) : value_(value) {};
     std::shared_ptr<Object> value_;
+    ObjectType Type() const override;
+    std::string_view Inspect() const override;
+};
+
+class Error : public Object
+{
+public:
+    explicit Error(std::string error_message) : message_(error_message) {};
+    std::string_view message_;
     ObjectType Type() const override;
     std::string_view Inspect() const override;
 };
