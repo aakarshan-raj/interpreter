@@ -61,8 +61,8 @@ public:
 class Error : public Object
 {
 public:
-    explicit Error(std::string error_message) : message_(error_message) {};
-    std::string_view message_;
+    explicit Error(std::string error_message) : value_(error_message) {};
+    std::string_view value_;
     ObjectType Type() const override;
     std::string_view Inspect() const override;
 };

@@ -73,5 +73,5 @@ ObjectType Error::Type() const
 
 std::string_view Error::Inspect() const
 {
-    return message_;
+    return value_;
 }
