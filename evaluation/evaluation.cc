@@ -23,7 +23,12 @@ std::shared_ptr<Boolean> EvalToNativeBoolean(bool EvalBool)
 std::shared_ptr<Object> EvalMinusOperatorExpression(std::shared_ptr<Object> right)
 {
     if (right->Type() != ObjectType::INTEGER)
-        return nullptr;
+    {
+        std::ostringstream oss;
+        oss << "unknown operator: -" << right->Type();
+
+        return std::make_shared<Error>(oss.str());
+    }
     return std::make_shared<Integer>(-std::dynamic_pointer_cast<Integer>(right)->value_);
 }
 
@@ -46,7 +51,13 @@ std::shared_ptr<Object> EvalPrefixExpression(std::string op, std::shared_ptr<Obj
 std::shared_ptr<Object> EvalAdditionAdditionOperation(std::shared_ptr<Object> left, std::shared_ptr<Object> right)
 {
     if (left->Type() != ObjectType::INTEGER && right->Type() != ObjectType::INTEGER)
-        return nullptr;
+    {
+        std::ostringstream oss;
+        oss << "unknown operator: " << left->Type() << " + " << right->Type();
+
+        return std::make_shared<Error>(oss.str());
+    }
+
     return std::make_shared<Integer>(
         std::dynamic_pointer_cast<Integer>(left)->value_ +
         std::dynamic_pointer_cast<Integer>(right)->value_);
@@ -126,7 +137,14 @@ std::shared_ptr<Object> EvalInfixExpression(std::shared_ptr<Object> left,
                                             std::string op,
                                             std::shared_ptr<Object> right) // opearations: + - / * == != < >
 {
-    if (op == "+")
+    if (left->Type() != right->Type())
+    {
+        std::ostringstream oss;
+        oss << "type mismatch: " << left->Type() << " + " << right->Type();
+
+        return std::make_shared<Error>(oss.str());
+    }
+    else if (op == "+")
     {
         return EvalAdditionAdditionOperation(left, right);
     }
@@ -158,6 +176,10 @@ std::shared_ptr<Object> EvalInfixExpression(std::shared_ptr<Object> left,
     {
         return EvalGreaterThanOperation(left, right);
     }
+    else
+    {
+        return std::make_shared<Error>("Unknown operator");
+    }
 }
 
 std::shared_ptr<Object> EvalStatement(std::vector<std::shared_ptr<Statement>> statements)
@@ -166,6 +188,10 @@ std::shared_ptr<Object> EvalStatement(std::vector<std::shared_ptr<Statement>> st
     for (auto single_statement : statements)
     {
         statement_eval = Eval(single_statement);
+        if (auto error_val = std::dynamic_pointer_cast<Error>(statement_eval))
+        {
+            return error_val;
+        }
         if (auto return_val = std::dynamic_pointer_cast<ReturnValue>(statement_eval))
         {
             return return_val;
@@ -243,7 +269,11 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
     }
     if (auto return_lit = std::dynamic_pointer_cast<ReturnStatement>(node))
     {
-        auto val = Eval(return_lit->return_expression);
+        std::shared_ptr<Object> val = Eval(return_lit->return_expression);
+        if (val->Type() == ObjectType::ERROR)
+        {
+            return val;
+        }
         return std::make_shared<ReturnValue>(val);
     }
     if (auto prefix_expr = std::dynamic_pointer_cast<PrefixExpression>(node))

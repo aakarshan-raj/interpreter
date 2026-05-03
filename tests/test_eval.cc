@@ -21,7 +21,7 @@ void TestObjects(std::shared_ptr<Object> obj, std::optional<T> expected)
 {
     auto _obj = std::dynamic_pointer_cast<U>(obj);
     ASSERT_NE(_obj, nullptr) << "Object is not of expected type";
-    EXPECT_EQ(_obj->value_, expected) << "Expected value to be:" << *expected << " Is:" << _obj->value_;
+    EXPECT_EQ(_obj->value_, expected) << "Expected value to be:" << *expected << ". Got:" << _obj->value_;
 }
 
 template <typename T, typename U>
@@ -188,7 +188,8 @@ void TestErrorHandling()
         {
             "if (10 > 1) { if (10 > 1) { return true + false; } return 1;} ",
             "unknown operator: BOOLEAN + BOOLEAN",
-        }};
+        }
+        };
 
     for (auto &i : tests)
     {
@@ -204,4 +205,5 @@ TEST(Evaluation, TestEvalExpression)
     TestBangOperatorEvaluation();
     TestIfElseExpression();
     TestReturnStatement();
+    TestErrorHandling();
 }
