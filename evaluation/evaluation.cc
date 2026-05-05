@@ -220,9 +220,22 @@ bool isTrue(std::shared_ptr<Object> condition_)
     }
 }
 
+bool isError(std::shared_ptr<Object> object_in_question)
+{
+    if (object_in_question->Type() == ObjectType::ERROR)
+    {
+        return true;
+    }
+    return false;
+}
+
 std::shared_ptr<Object> EvalIfExpression(std::shared_ptr<IfExpression> ifExpression)
 {
     auto condition_eval_ = Eval(ifExpression->condition_); // currenly it will be: a int, false, true, null
+    if (isError(condition_eval_))
+    {
+        return condition_eval_;
+    }
     if (isTrue(condition_eval_))
     {
         return Eval(ifExpression->consequence_);
@@ -270,7 +283,7 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
     if (auto return_lit = std::dynamic_pointer_cast<ReturnStatement>(node))
     {
         std::shared_ptr<Object> val = Eval(return_lit->return_expression);
-        if (val->Type() == ObjectType::ERROR)
+        if (isError(val))
         {
             return val;
         }
@@ -279,12 +292,24 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
     if (auto prefix_expr = std::dynamic_pointer_cast<PrefixExpression>(node))
     {
         auto prefix_obj = Eval(prefix_expr->right);
+        if (isError(prefix_obj))
+        {
+            return prefix_obj;
+        }
         return EvalPrefixExpression(prefix_expr->op, prefix_obj);
     }
     if (auto infix_expr = std::dynamic_pointer_cast<InfixExpression>(node))
     {
         auto left_evaluated = Eval(infix_expr->left);
+        if (isError(left_evaluated))
+        {
+            return left_evaluated;
+        }
         auto right_evaluated = Eval(infix_expr->right);
+        if (isError(right_evaluated))
+        {
+            return right_evaluated;
+        }
         return EvalInfixExpression(left_evaluated, infix_expr->op, right_evaluated);
     }
 
