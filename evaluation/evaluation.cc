@@ -250,6 +250,20 @@ std::shared_ptr<Object> EvalIfExpression(std::shared_ptr<IfExpression> ifExpress
     }
 }
 
+std::shared_ptr<Object> EvalIdentifier(std::shared_ptr<Identifier> Identifier, std::shared_ptr<Environment> env)
+{
+    if (env->get(Identifier->value_).has_value())
+    {
+        return env->get(Identifier->value_).value();
+    }
+    else
+    {
+        std::ostringstream oss;
+        oss << "identifier not found: " << Identifier->value_;
+        return std::make_shared<Error>(oss.str());
+    }
+}
+
 std::shared_ptr<Object> Eval(std::shared_ptr<Node> node, std::shared_ptr<Environment> env)
 {
     if (auto expr_stat = std::dynamic_pointer_cast<ExpressionStatement>(node))
@@ -314,13 +328,16 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node, std::shared_ptr<Environ
     }
     if (auto let_stat = std::dynamic_pointer_cast<LetStatement>(node))
     {
-        std::cout << "Evaling, let " << std::endl;
         auto eval_value_ = Eval(let_stat->value_, env);
         if (isError(eval_value_))
         {
             return eval_value_;
         }
-        return eval_value_;
+        env->set(let_stat->name_->value_, eval_value_);
+    }
+    if (auto iden = std::dynamic_pointer_cast<Identifier>(node))
+    {
+        return EvalIdentifier(iden, env);
     }
 
     return 0;

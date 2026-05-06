@@ -189,7 +189,12 @@ void TestErrorHandling()
         {
             "if (10 > 1) { if (10 > 1) { return true + false; } return 1;} ",
             "unknown operator: BOOLEAN + BOOLEAN",
-        }};
+        },
+        {
+            "foobar",
+            "identifier not found: foobar",
+        },
+    };
 
     for (auto &i : tests)
     {

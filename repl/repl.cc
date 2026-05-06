@@ -29,7 +29,8 @@ void Repl::start(bool PRINT_DEBUG_INFO)
             std::cout << "Evaluation:\n";
         }
         auto evaluated = Eval(x, env);
-        evaluated->Inspect();
+        if (evaluated != nullptr)
+            evaluated->Inspect();
     }
 }
 
