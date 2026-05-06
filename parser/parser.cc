@@ -326,7 +326,6 @@ std::shared_ptr<BlockStatement> Parser::parseBlockStatement()
 
     auto blockstmt = std::make_shared<BlockStatement>(current_token_);
     nextToken();
-    std::cout << "Cur:" << current_token_;
     while (!currentTokenIs(RBRACE) && !currentTokenIs(EOF))
     {
         auto stmt = parseStatement();

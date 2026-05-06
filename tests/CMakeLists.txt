@@ -8,6 +8,7 @@ if(BUILD_TESTING)
 	target_link_libraries(test_parser PRIVATE GTest::gtest_main parser) 
 	target_link_libraries(test_ast PRIVATE GTest::gtest_main ast) 
 	target_link_libraries(test_eval PRIVATE GTest::gtest_main evaluation) 
+	target_link_libraries(test_eval PRIVATE GTest::gtest_main environment) 
 	                                            
 	include(GoogleTest)
 	gtest_discover_tests(test_lexer)

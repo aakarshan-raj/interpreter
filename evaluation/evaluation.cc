@@ -182,12 +182,12 @@ std::shared_ptr<Object> EvalInfixExpression(std::shared_ptr<Object> left,
     }
 }
 
-std::shared_ptr<Object> EvalStatement(std::vector<std::shared_ptr<Statement>> statements)
+std::shared_ptr<Object> EvalStatement(std::vector<std::shared_ptr<Statement>> statements, std::shared_ptr<Environment> env)
 {
     std::shared_ptr<Object> statement_eval;
     for (auto single_statement : statements)
     {
-        statement_eval = Eval(single_statement);
+        statement_eval = Eval(single_statement, env);
         if (auto error_val = std::dynamic_pointer_cast<Error>(statement_eval))
         {
             return error_val;
@@ -229,20 +229,20 @@ bool isError(std::shared_ptr<Object> object_in_question)
     return false;
 }
 
-std::shared_ptr<Object> EvalIfExpression(std::shared_ptr<IfExpression> ifExpression)
+std::shared_ptr<Object> EvalIfExpression(std::shared_ptr<IfExpression> ifExpression, std::shared_ptr<Environment> env)
 {
-    auto condition_eval_ = Eval(ifExpression->condition_); // currenly it will be: a int, false, true, null
+    auto condition_eval_ = Eval(ifExpression->condition_, env); // currenly it will be: a int, false, true, null
     if (isError(condition_eval_))
     {
         return condition_eval_;
     }
     if (isTrue(condition_eval_))
     {
-        return Eval(ifExpression->consequence_);
+        return Eval(ifExpression->consequence_, env);
     }
     else if (ifExpression->alternative_ != nullptr)
     {
-        return Eval(ifExpression->alternative_);
+        return Eval(ifExpression->alternative_, env);
     }
     else
     {
@@ -250,15 +250,15 @@ std::shared_ptr<Object> EvalIfExpression(std::shared_ptr<IfExpression> ifExpress
     }
 }
 
-std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
+std::shared_ptr<Object> Eval(std::shared_ptr<Node> node, std::shared_ptr<Environment> env)
 {
     if (auto expr_stat = std::dynamic_pointer_cast<ExpressionStatement>(node))
     {
-        return Eval(expr_stat->Expr);
+        return Eval(expr_stat->Expr, env);
     }
     if (auto program = std::dynamic_pointer_cast<Program>(node))
     {
-        return EvalStatement(program->statements_);
+        return EvalStatement(program->statements_, env);
     }
     if (auto inte_lit = std::dynamic_pointer_cast<IntegerLiteral>(node))
     {
@@ -274,15 +274,15 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
     }
     if (auto block_lit = std::dynamic_pointer_cast<BlockStatement>(node))
     {
-        return EvalStatement(block_lit->statements);
+        return EvalStatement(block_lit->statements, env);
     }
     if (auto cond_lit = std::dynamic_pointer_cast<IfExpression>(node))
     {
-        return EvalIfExpression(cond_lit);
+        return EvalIfExpression(cond_lit, env);
     }
     if (auto return_lit = std::dynamic_pointer_cast<ReturnStatement>(node))
     {
-        std::shared_ptr<Object> val = Eval(return_lit->return_expression);
+        std::shared_ptr<Object> val = Eval(return_lit->return_expression, env);
         if (isError(val))
         {
             return val;
@@ -291,7 +291,7 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
     }
     if (auto prefix_expr = std::dynamic_pointer_cast<PrefixExpression>(node))
     {
-        auto prefix_obj = Eval(prefix_expr->right);
+        auto prefix_obj = Eval(prefix_expr->right, env);
         if (isError(prefix_obj))
         {
             return prefix_obj;
@@ -300,17 +300,27 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node)
     }
     if (auto infix_expr = std::dynamic_pointer_cast<InfixExpression>(node))
     {
-        auto left_evaluated = Eval(infix_expr->left);
+        auto left_evaluated = Eval(infix_expr->left, env);
         if (isError(left_evaluated))
         {
             return left_evaluated;
         }
-        auto right_evaluated = Eval(infix_expr->right);
+        auto right_evaluated = Eval(infix_expr->right, env);
         if (isError(right_evaluated))
         {
             return right_evaluated;
         }
         return EvalInfixExpression(left_evaluated, infix_expr->op, right_evaluated);
+    }
+    if (auto let_stat = std::dynamic_pointer_cast<LetStatement>(node))
+    {
+        std::cout << "Evaling, let " << std::endl;
+        auto eval_value_ = Eval(let_stat->value_, env);
+        if (isError(eval_value_))
+        {
+            return eval_value_;
+        }
+        return eval_value_;
     }
 
     return 0;

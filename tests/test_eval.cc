@@ -47,8 +47,9 @@ std::shared_ptr<Object> TestEval(std::string &input)
     std::shared_ptr<Lexer> l = std::make_shared<Lexer>(input);
     std::shared_ptr<Parser> p = std::make_shared<Parser>(l);
     auto parsed_program = p->parseProgram();
+    std::shared_ptr<Environment> env = std::make_shared<Environment>();
 
-    return Eval(parsed_program);
+    return Eval(parsed_program, env);
 }
 
 void TestEvalIntegerExpression()
@@ -188,13 +189,27 @@ void TestErrorHandling()
         {
             "if (10 > 1) { if (10 > 1) { return true + false; } return 1;} ",
             "unknown operator: BOOLEAN + BOOLEAN",
-        }
-        };
+        }};
 
     for (auto &i : tests)
     {
         auto x = TestEval(i.input);
         TestObjects<std::string, Error>(x, i.output);
+    }
+}
+
+void TestLetStatements()
+{
+    std::vector<InputOutput<int>> tests = {
+        {"let a = 5; a;", 5},
+        {"let a = 5 * 5; a;", 25},
+        {"let a = 5; let b = a; b;", 5},
+        {"let a = 5; let b = a; let c = a + b + 5; c;", 15},
+    };
+    for (auto &i : tests)
+    {
+        auto x = TestEval(i.input);
+        TestObjects<int, Integer>(x, i.output);
     }
 }
 
@@ -206,4 +221,5 @@ TEST(Evaluation, TestEvalExpression)
     TestIfElseExpression();
     TestReturnStatement();
     TestErrorHandling();
+    TestLetStatements();
 }

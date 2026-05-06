@@ -3,6 +3,7 @@
 void Repl::start(bool PRINT_DEBUG_INFO)
 {
 
+    std::shared_ptr<Environment> env = std::make_shared<Environment>();
     while (true)
     {
         std::cout << ">> ";
@@ -27,8 +28,7 @@ void Repl::start(bool PRINT_DEBUG_INFO)
             }
             std::cout << "Evaluation:\n";
         }
-
-        auto evaluated = Eval(x);
+        auto evaluated = Eval(x, env);
         evaluated->Inspect();
     }
 }

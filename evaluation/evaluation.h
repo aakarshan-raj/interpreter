@@ -3,8 +3,9 @@
 #include "../object/object.h"
 #include <memory>
 #include "../ast/ast.h"
+#include "../object/environment.h"
 
-std::shared_ptr<Object> Eval(std::shared_ptr<Node>);
+std::shared_ptr<Object> Eval(std::shared_ptr<Node>, std::shared_ptr<Environment> env);
 
 inline const auto native_true = std::make_shared<Boolean>(true);
 inline const auto native_false = std::make_shared<Boolean>(false);
