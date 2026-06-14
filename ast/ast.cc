@@ -238,13 +238,10 @@ std::string BooleanLiteral::String() const
 std::string BlockStatement::String() const
 {
     std::ostringstream out;
-    out << "{ ";
     for (const auto &stmt : statements)
     {
-        stmt->String();
-        out << "\n";
+        out << stmt->String();
     }
-    out << "}";
     return out.str();
 }
 
