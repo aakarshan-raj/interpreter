@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <optional>
 
+class Object;  
 class Environment
 {
 private:

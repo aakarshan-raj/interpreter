@@ -1,4 +1,5 @@
 #include "object.h"
+#include "environment.h"
 
 ObjectType Integer::Type() const
 {
@@ -40,28 +41,30 @@ std::string_view ReturnValue::Inspect() const
     return value_->Inspect();
 }
 
-std::ostream& operator<<(std::ostream& os, ObjectType type)
+std::ostream &operator<<(std::ostream &os, ObjectType type)
 {
     switch (type)
     {
-        case ObjectType::INTEGER:
-            os << "INTEGER";
-            break;
-        case ObjectType::BOOLEAN:
-            os << "BOOLEAN";
-            break;
-        case ObjectType::NOTHING:
-            os << "NOTHING";
-            break;
-        case ObjectType::RETURN_VALUE:
-            os << "RETURN_VALUE";
-            break;
-        case ObjectType::ERROR:
-            os << "ERROR";
-            break;
-        default:
-            os << "UNKNOWN";
-            break;
+    case ObjectType::INTEGER:
+        os << "INTEGER";
+        break;
+    case ObjectType::BOOLEAN:
+        os << "BOOLEAN";
+        break;
+    case ObjectType::NOTHING:
+        os << "NOTHING";
+        break;
+    case ObjectType::RETURN_VALUE:
+        os << "RETURN_VALUE";
+        break;
+    case ObjectType::ERROR:
+        os << "ERROR";
+        break;
+    case ObjectType::FUNCTION_OBJ:
+        os << "FUNCTION_OBJ";
+    default:
+        os << "UNKNOWN";
+        break;
     }
     return os;
 }
@@ -74,4 +77,32 @@ ObjectType Error::Type() const
 std::string_view Error::Inspect() const
 {
     return value_;
+}
+
+ObjectType Function::Type() const
+{
+    return ObjectType::FUNCTION_OBJ;
+}
+
+std::string_view Function::Inspect() const
+{
+    std::ostringstream out;
+    out << "fn";
+    out << "( ";
+
+    for (const std::shared_ptr<Identifier> &x : parameters_)
+    {
+        out << x->String();
+        if (!(&x == &parameters_.back()))
+        {
+            out << ", ";
+        }
+    }
+    out << " )";
+
+    out << "{\n";
+    out << body_->String();
+    out << "}";
+
+    return out.str();
 }

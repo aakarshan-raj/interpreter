@@ -218,6 +218,18 @@ void TestLetStatements()
     }
 }
 
+void TestFunctionObject()
+{
+    std::string input = "fn(x) { x + 2; };";
+    std::string expected_body = "(x + 2)";
+    auto x = TestEval(input);
+    auto _obj = std::dynamic_pointer_cast<Function>(x);
+    ASSERT_NE(_obj, nullptr) << "Object is not of expected type";
+    EXPECT_EQ(_obj->parameters_.size(), 1) << "Expected parameters length to be:" << 1 << " Is:" << _obj->parameters_.size();
+    EXPECT_EQ(_obj->parameters_[0]->String(), "x") << "Expected parameters string to be:" << "x" << " Is:" << _obj->parameters_[0]->String();
+    EXPECT_EQ(_obj->body_->String(), expected_body) << "Expected body string to be:" << expected_body << " Is:" << _obj->body_->String();
+}
+
 TEST(Evaluation, TestEvalExpression)
 {
     TestEvalIntegerExpression();
@@ -227,4 +239,5 @@ TEST(Evaluation, TestEvalExpression)
     TestReturnStatement();
     TestErrorHandling();
     TestLetStatements();
+    TestFunctionObject();
 }

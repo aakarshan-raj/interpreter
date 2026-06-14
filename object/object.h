@@ -4,6 +4,10 @@
 #include <string>
 #include <iostream>
 #include <memory>
+#include <vector>
+#include "../ast/ast.h"
+
+class Environment;
 
 enum class ObjectType
 {
@@ -11,10 +15,11 @@ enum class ObjectType
     BOOLEAN,
     NOTHING,
     RETURN_VALUE,
-    ERROR
+    ERROR,
+    FUNCTION_OBJ,
 };
 
-std::ostream& operator<<(std::ostream& os, ObjectType type);
+std::ostream &operator<<(std::ostream &os, ObjectType type);
 
 class Object
 {
@@ -63,6 +68,16 @@ class Error : public Object
 public:
     explicit Error(std::string error_message) : value_(error_message) {};
     std::string value_;
+    ObjectType Type() const override;
+    std::string_view Inspect() const override;
+};
+
+class Function : public Object
+{
+public:
+    std::shared_ptr<Environment> env_;
+    std::shared_ptr<BlockStatement> body_;
+    std::vector<std::shared_ptr<Identifier>> parameters_;
     ObjectType Type() const override;
     std::string_view Inspect() const override;
 };

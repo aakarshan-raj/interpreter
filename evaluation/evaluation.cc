@@ -339,6 +339,14 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node, std::shared_ptr<Environ
     {
         return EvalIdentifier(iden, env);
     }
+    if (auto iden = std::dynamic_pointer_cast<FunctionLiteral>(node))
+    {
+        std::shared_ptr<Function> fn = std::make_shared<Function>();
+        fn->body_ = iden->body_;
+        fn->parameters_ = iden->parameter_;
+        fn->env_ = env;
+        return fn;
+    }
 
     return 0;
 }
