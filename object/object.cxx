@@ -62,6 +62,7 @@ std::ostream &operator<<(std::ostream &os, ObjectType type)
         break;
     case ObjectType::FUNCTION_OBJ:
         os << "FUNCTION_OBJ";
+        break;
     default:
         os << "UNKNOWN";
         break;

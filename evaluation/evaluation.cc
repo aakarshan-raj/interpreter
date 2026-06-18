@@ -264,6 +264,21 @@ std::shared_ptr<Object> EvalIdentifier(std::shared_ptr<Identifier> Identifier, s
     }
 }
 
+std::vector<std::shared_ptr<Object>> EvalExpression(std::vector<std::shared_ptr<Expression>> exprs, std::shared_ptr<Environment> env)
+{
+    std::vector<std::shared_ptr<Object>> eval_args;
+    for (auto &c : exprs)
+    {
+        auto evaluated = Eval(c, env);
+        if (isError(evaluated))
+        {
+            return std::vector<std::shared_ptr<Object>>{evaluated};
+        }
+        eval_args.push_back(evaluated);
+    }
+    return eval_args;
+}
+
 std::shared_ptr<Object> Eval(std::shared_ptr<Node> node, std::shared_ptr<Environment> env)
 {
     if (auto expr_stat = std::dynamic_pointer_cast<ExpressionStatement>(node))
@@ -346,6 +361,19 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node, std::shared_ptr<Environ
         fn->parameters_ = iden->parameter_;
         fn->env_ = env;
         return fn;
+    }
+    if (auto call = std::dynamic_pointer_cast<CallExpression>(node))
+    {
+        auto fun = Eval(call->function_, env);
+        if (isError(fun))
+        {
+            return fun;
+        }
+        auto args = EvalExpression(call->arguments_, env);
+        if (args.size() == 1 && isError(args[0]))
+        {
+            return args[0];
+        }
     }
 
     return 0;

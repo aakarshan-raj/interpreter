@@ -682,7 +682,7 @@ TEST(Parser, TestCallExpressionForPrecendence)
 
     EXPECT_TRUE(TestIdetifier(callExpression->function_, "add")) << "TestIdetifier Fail\n";
 
-    EXPECT_EQ(callExpression->arguments_.size(), 1) << "31 parameter expected in function parameter list.";
+    EXPECT_EQ(callExpression->arguments_.size(), 1) << "1 parameter expected in function parameter list.";
 
     EXPECT_TRUE(testInfixExpression(callExpression->arguments_[0], std::string("b"), "*", std::string("c")));
     // EXPECT_TRUE(testInfixExpression(callExpression->arguments_[2], 6, "+", 4));
