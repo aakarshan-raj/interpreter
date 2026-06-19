@@ -12,9 +12,20 @@ std::shared_ptr<Object> Environment::set(std::string var, std::shared_ptr<Object
 std::optional<std::shared_ptr<Object>> Environment::get(std::string var_name)
 {
     auto it = store.find(var_name);
-    if (it != store.end())
+    if (it == store.end() && outer != nullptr)
     {
-        return it->second;
+        return outer->get(var_name);
     }
-    return std::nullopt;
+    else if (it == store.end() && outer == nullptr)
+    {
+        return std::nullopt;
+    }
+    return it->second;
+}
+
+std::shared_ptr<Environment> Environment::newEnclosedEnvironment(std::shared_ptr<Environment> outer_env)
+{
+    std::shared_ptr<Environment> env{};
+    env->outer = outer_env;
+    return env;
 }
