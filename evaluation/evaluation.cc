@@ -279,6 +279,34 @@ std::vector<std::shared_ptr<Object>> EvalExpression(std::vector<std::shared_ptr<
     return eval_args;
 }
 
+std::shared_ptr<Environment> extenFuncEnv(std::shared_ptr<Function> fn, std::vector<std::shared_ptr<Object>> args)
+{
+    auto func_env = Environment::newEnclosedEnvironment(fn->env_);
+    for (int i = 0; i < fn->parameters_.size(); i++)
+    {
+        func_env->set(fn->parameters_[i]->value_, args[i]);
+    }
+
+    return func_env;
+}
+
+std::shared_ptr<Object> unWrapReturnValue(std::shared_ptr<Object> obj)
+{
+    if (auto re = std::dynamic_pointer_cast<ReturnValue>(obj))
+    {
+        return re->value_;
+    }
+    return obj;
+}
+
+std::shared_ptr<Object> applyFunction(std::shared_ptr<Object> func, std::vector<std::shared_ptr<Object>> args)
+{
+    auto fn = std::dynamic_pointer_cast<Function>(func);
+    auto func_env = extenFuncEnv(fn, args);
+    auto fn_evaluated = Eval(fn->body_, func_env);
+    return unWrapReturnValue(fn_evaluated);
+}
+
 std::shared_ptr<Object> Eval(std::shared_ptr<Node> node, std::shared_ptr<Environment> env)
 {
     if (auto expr_stat = std::dynamic_pointer_cast<ExpressionStatement>(node))
@@ -374,6 +402,7 @@ std::shared_ptr<Object> Eval(std::shared_ptr<Node> node, std::shared_ptr<Environ
         {
             return args[0];
         }
+        return applyFunction(fun,args);
     }
 
     return 0;
