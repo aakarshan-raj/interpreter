@@ -368,8 +368,15 @@ std::shared_ptr<Expression> Parser::parseFunctionLiteral()
 
 std::shared_ptr<Expression> Parser::parseCallExpression(std::shared_ptr<Expression> expr)
 {
+    Token token;
 
-    auto callExpr = std::make_shared<CallExpression>(std::dynamic_pointer_cast<Identifier>(expr)->token_);
+    if(auto iden_token = std::dynamic_pointer_cast<Identifier>(expr)){
+        token = iden_token->token_;
+    } else{
+        token = Token{expr->TokenLiteral()};
+    }
+
+    auto callExpr = std::make_shared<CallExpression>(token);
     callExpr->function_ = expr;
 
     if (!currentTokenIs(LPAREN))
