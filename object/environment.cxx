@@ -25,7 +25,7 @@ std::optional<std::shared_ptr<Object>> Environment::get(std::string var_name)
 
 std::shared_ptr<Environment> Environment::newEnclosedEnvironment(std::shared_ptr<Environment> outer_env)
 {
-    std::shared_ptr<Environment> env{};
+    std::shared_ptr<Environment> env = std::make_shared<Environment>();
     env->outer = outer_env;
     return env;
 }

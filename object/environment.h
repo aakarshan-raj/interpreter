@@ -16,7 +16,7 @@ public:
     Environment();
     std::shared_ptr<Object> set(std::string, std::shared_ptr<Object>);
     std::optional<std::shared_ptr<Object>> get(std::string);
-    std::shared_ptr<Environment> newEnclosedEnvironment(std::shared_ptr<Environment>);
+    static std::shared_ptr<Environment> newEnclosedEnvironment(std::shared_ptr<Environment>);
 };
 
 #endif
