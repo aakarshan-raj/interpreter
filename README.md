@@ -18,5 +18,8 @@ Adding support for a new Type:
 5. write basic tests
 6. create parser function
 7. register the function
-8. write more tests
-9. enjoy a new feature in language
+8. write parsing tests
+9. create a Object class that represents this new type in new language if necessary. Example: INTEGER, NULL, BOOLEAN,   RETURN VALUE, FUNCTION. For example IntegerLiteral from AST is converted into Integer of Object
+10. eval source(parsed) into desnt(eval)
+
+Lots of steps in between....
